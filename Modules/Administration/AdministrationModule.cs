@@ -378,11 +378,11 @@ namespace NadekoBot.Modules.Administration
                         var user = e.GetArg("user");
                         if (string.IsNullOrWhiteSpace(msg))
                         {
-                            var msg = "See #rules";
+                            msg = "See #rules";
                         }
-                        if (str(msg) == "bot")
+                        if (msg.ToString() == "bot")
                         {
-                            var msg = "See #rules, bot discussion is prohibited.";
+                            msg = "See #rules, bot discussion is prohibited.";
                         }
                         if (e.User.ServerPermissions.KickMembers)
                         {
