@@ -376,6 +376,14 @@ namespace NadekoBot.Modules.Administration
                     {
                         var msg = e.GetArg("msg");
                         var user = e.GetArg("user");
+                        if (string.IsNullOrWhiteSpace(msg))
+                        {
+                            var msg = "See #rules";
+                        }
+                        if (str(msg) == "bot")
+                        {
+                            var msg = "See #rules, bot discussion is prohibited.";
+                        }
                         if (e.User.ServerPermissions.KickMembers)
                         {
                             var usr = e.Server.FindUsers(user).FirstOrDefault();
