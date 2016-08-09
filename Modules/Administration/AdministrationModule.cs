@@ -380,7 +380,8 @@ namespace NadekoBot.Modules.Administration
                         {
                             msg = "See #rules";
                         }
-                        if (msg.ToString() == "bot")
+                        int index = msg.IndexOf("bot", StringComparison.InvariantCultureIgnoreCase);
+                        if(index > -1)
                         {
                             msg = "See #rules, bot discussion is prohibited.";
                         }
