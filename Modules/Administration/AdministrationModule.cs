@@ -303,6 +303,14 @@ namespace NadekoBot.Modules.Administration
                         {
                             var msg = e.GetArg("msg");
                             var user = e.GetArg("user");
+                            if (string.IsNullOrWhiteSpace(msg))
+                            {
+                                msg = "See #rules";
+                            }
+                            if (msg.ToString().ToLower() == "bot")
+                            {
+                                msg = "See #rules, bot discussion is prohibited.";
+                            }
                             if (e.User.ServerPermissions.BanMembers)
                             {
                                 var usr = e.Server.FindUsers(user).FirstOrDefault();
@@ -339,6 +347,14 @@ namespace NadekoBot.Modules.Administration
                         {
                             var msg = e.GetArg("msg");
                             var user = e.GetArg("user");
+                            if (string.IsNullOrWhiteSpace(msg))
+                            {
+                                msg = "See #rules";
+                            }
+                            if (msg.ToString().ToLower() == "bot")
+                            {
+                                msg = "See #rules, bot discussion is prohibited.";
+                            }
                             if (e.User.ServerPermissions.BanMembers)
                             {
                                 var usr = e.Server.FindUsers(user).FirstOrDefault();
