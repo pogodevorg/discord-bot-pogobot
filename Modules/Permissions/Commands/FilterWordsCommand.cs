@@ -18,7 +18,8 @@ namespace NadekoBot.Modules.Permissions.Commands
                 var role_devs = args.Server.FindRoles("Developers").FirstOrDefault();
                 var role_admins = args.Server.FindRoles("Administrators").FirstOrDefault();
                 var role_mods = args.Server.FindRoles("Moderators").FirstOrDefault();
-                if (args.User.HasRole(role_devs) || args.User.HasRole(role_admins) || args.User.HasRole(role_mods)) return;
+                var role_custom = args.Server.FindRoles("Discord").FirstOrDefault();
+                if (args.User.HasRole(role_devs) || args.User.HasRole(role_admins) || args.User.HasRole(role_mods) || args.User.HasRole(role_custom)) return;
                 try
                 {
                     Classes.ServerPermissions serverPerms;

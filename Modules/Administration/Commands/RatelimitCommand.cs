@@ -11,8 +11,8 @@ namespace NadekoBot.Modules.Administration.Commands
     {
 
         public static ConcurrentDictionary<ulong, ConcurrentDictionary<ulong, DateTime>> RatelimitingChannels = new ConcurrentDictionary<ulong, ConcurrentDictionary<ulong, DateTime>>();
-
-        private static readonly TimeSpan ratelimitTime = new TimeSpan(0, 0, 0, 10);
+        public static int slowtime = 0;
+        private static readonly TimeSpan ratelimitTime = new TimeSpan(0, 0, 0, slowtime);
 
         public RatelimitCommand(DiscordModule module) : base(module)
         {
@@ -24,7 +24,8 @@ namespace NadekoBot.Modules.Administration.Commands
                 var role_devs = e.Server.FindRoles("Developers").FirstOrDefault();
                 var role_admins = e.Server.FindRoles("Administrators").FirstOrDefault();
                 var role_mods = e.Server.FindRoles("Moderators").FirstOrDefault();
-                if (e.User.HasRole(role_devs) || e.User.HasRole(role_admins) || e.User.HasRole(role_mods)) return;
+                var role_custom = e.Server.FindRoles("Discord").FirstOrDefault();
+                if (e.User.HasRole(role_devs) || e.User.HasRole(role_admins) || e.User.HasRole(role_mods) || e.User.HasRole(role_custom)) return;
 
                 ConcurrentDictionary<ulong, DateTime> userTimePair;
                 if (!RatelimitingChannels.TryGetValue(e.Channel.Id, out userTimePair)) return;
@@ -48,10 +49,24 @@ namespace NadekoBot.Modules.Administration.Commands
         internal override void Init(CommandGroupBuilder cgb)
         {
             cgb.CreateCommand(Module.Prefix + "slowmode")
-                .Description($"Toggles slow mode. When ON, users will be able to send only 1 message every 10 seconds. **Needs Manage Messages Permissions.**| `{Prefix}slowmode`")
+                .Description($"Toggles slow mode. When ON, users will be able to send only 1 message every "+slowtime+" seconds. **Needs Manage Messages Permissions.**| `{Prefix}slowmode`")
                 .AddCheck(SimpleCheckers.ManageMessages())
+                .Parameter("msg", ParameterType.Unparsed)
                 .Do(async e =>
                 {
+                    try
+                    {
+                        slowtime = Int32.Parse(e.GetArg("msg"));
+                    }
+                    catch (FormatException x)
+                    {
+                        Console.WriteLine(x.Message);
+                    }
+
+                    if (slowtime == 0 || string.IsNullOrWhiteSpace(e.GetArg("msg")))
+                    {
+                        slowtime = 10;
+                    }
                     ConcurrentDictionary<ulong, DateTime> throwaway;
                     if (RatelimitingChannels.TryRemove(e.Channel.Id, out throwaway))
                     {
@@ -61,8 +76,9 @@ namespace NadekoBot.Modules.Administration.Commands
                     if (RatelimitingChannels.TryAdd(e.Channel.Id, new ConcurrentDictionary<ulong, DateTime>()))
                     {
                         await e.Channel.SendMessage("Slow mode initiated. " +
-                                                    "Users can't send more than 1 message every 10 seconds.")
+                                                    "Users can't send more than 1 message every "+slowtime+" seconds.")
                                                     .ConfigureAwait(false);
+                        return;
                     }
                 });
         }
