@@ -21,12 +21,14 @@ namespace NadekoBot.Modules.Administration.Commands
                 if (e.Channel.IsPrivate || e.User.Id == NadekoBot.Client.CurrentUser.Id)
                     return;
                 if (NadekoBot.IsOwner(e.User.Id)) return;
+                try { 
                 var role_devs = e.Server.FindRoles("Developers").FirstOrDefault();
                 var role_admins = e.Server.FindRoles("Administrators").FirstOrDefault();
                 var role_mods = e.Server.FindRoles("Moderators").FirstOrDefault();
                 var role_custom = e.Server.FindRoles("Discord").FirstOrDefault();
                 if (e.User.HasRole(role_devs) || e.User.HasRole(role_admins) || e.User.HasRole(role_mods) || e.User.HasRole(role_custom)) return;
-
+                }
+                catch { }
                 ConcurrentDictionary<ulong, DateTime> userTimePair;
                 if (!RatelimitingChannels.TryGetValue(e.Channel.Id, out userTimePair)) return;
                 DateTime lastMessageTime;

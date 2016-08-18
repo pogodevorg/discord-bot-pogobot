@@ -15,11 +15,14 @@ namespace NadekoBot.Modules.Permissions.Commands
             {
                 if (args.Channel.IsPrivate || args.User.Id == NadekoBot.Client.CurrentUser.Id) return;
                 if (NadekoBot.IsOwner(args.User.Id)) return;
-                var role_devs = args.Server.FindRoles("Developers").FirstOrDefault();
-                var role_admins = args.Server.FindRoles("Administrators").FirstOrDefault();
-                var role_mods = args.Server.FindRoles("Moderators").FirstOrDefault();
-                var role_custom = args.Server.FindRoles("Discord").FirstOrDefault();
-                if (args.User.HasRole(role_devs) || args.User.HasRole(role_admins) || args.User.HasRole(role_mods) || args.User.HasRole(role_custom)) return;
+                try
+                {
+                    var role_devs = args.Server.FindRoles("Developers").FirstOrDefault();
+                    var role_admins = args.Server.FindRoles("Administrators").FirstOrDefault();
+                    var role_mods = args.Server.FindRoles("Moderators").FirstOrDefault();
+                    var role_custom = args.Server.FindRoles("Discord").FirstOrDefault();
+                    if (args.User.HasRole(role_devs) || args.User.HasRole(role_admins) || args.User.HasRole(role_mods) || args.User.HasRole(role_custom)) return;
+                } catch { }
                 try
                 {
                     Classes.ServerPermissions serverPerms;
