@@ -281,6 +281,30 @@ $@"🌍 **Weather for** 【{obj["target"]}】
                           await e.Channel.SendMessage($"💢 Error {ex.Message}").ConfigureAwait(false);
                       }
                   });
+				  
+                cgb.CreateCommand(Prefix + "yoda")
+                  .Description($"Transforms your sentence to Yoda | `{Prefix}yoda I am Lisiano`")
+                  .Parameter("query", ParameterType.Unparsed)
+                  .Do(async e =>
+                  {
+                      var arg = e.GetArg("query");
+                      if (string.IsNullOrWhiteSpace(arg))
+                      {
+                          await e.Channel.SendMessage("💢 Please enter a sentence.").ConfigureAwait(false);
+                          return;
+                      }
+                      await e.Channel.SendIsTyping().ConfigureAwait(false);
+                      var headers = new Dictionary<string, string> { { "X-Mashape-Key", NadekoBot.Creds.MashapeKey }, { "Accept", "text/plain" } };
+                      var res = await SearchHelper.GetResponseStringAsync($"https://yoda.p.mashape.com/yoda?sentence={Uri.EscapeUriString(arg)}", headers).ConfigureAwait(false);
+                      try
+                      {
+                          await e.Channel.SendMessage("`"+e.User.Name.ToString()+"`: ```"+res.ToString()+"```");
+                      }
+                      catch
+                      {
+                          await e.Channel.SendMessage("💢 Failed yoda-ing your sentence. Maybe next Yoda.").ConfigureAwait(false);
+                      }
+                  });
 
                 cgb.CreateCommand(Prefix + "ud")
                   .Description($"Searches Urban Dictionary for a word. | `{Prefix}ud Pineapple`")
