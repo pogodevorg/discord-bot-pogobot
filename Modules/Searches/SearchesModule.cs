@@ -318,15 +318,15 @@ $@"🌍 **Weather for** 【{obj["target"]}】
                           return;
                       }
                       await e.Channel.SendIsTyping().ConfigureAwait(false);
-                      var headers = new Dictionary<string, string> { { "X-Mashape-Key", NadekoBot.Creds.MashapeKey } };
-                      var res = await SearchHelper.GetResponseStringAsync($"https://mashape-community-urban-dictionary.p.mashape.com/define?term={Uri.EscapeUriString(arg)}", headers).ConfigureAwait(false);
+                      var headers = new Dictionary<string, string> { { "Accept", "application/json" } };
+                      var res = await SearchHelper.GetResponseStringAsync($"http://api.urbandictionary.com/v0/define?term={Uri.EscapeUriString(arg)}", headers).ConfigureAwait(false);
                       try
                       {
                           var items = JObject.Parse(res);
                           var sb = new System.Text.StringBuilder();
                           sb.AppendLine($"`Term:` {items["list"][0]["word"].ToString()}");
                           sb.AppendLine($"`Definition:` {items["list"][0]["definition"].ToString()}");
-                          sb.Append($"`Link:` <{await items["list"][0]["permalink"].ToString().ShortenUrl().ConfigureAwait(false)}>");
+                          sb.Append($"`Link:` <{items["list"][0]["permalink"].ToString()}>");
                           await e.Channel.SendMessage(sb.ToString());
                       }
                       catch
