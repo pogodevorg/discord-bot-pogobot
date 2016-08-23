@@ -85,7 +85,7 @@ namespace NadekoBot.Modules.Music.Classes
 
             try
             {
-                var attempt = 0;             
+                var attempt = 0;
 
                 var prebufferingTask = CheckPrebufferingAsync(inStream, sb, cancelToken);
                 var sw = new Stopwatch();
@@ -135,7 +135,7 @@ namespace NadekoBot.Modules.Music.Classes
                                 break;
                             }
                             else
-                                await Task.Delay(100, cancelToken).ConfigureAwait(false);                         
+                                await Task.Delay(100, cancelToken).ConfigureAwait(false);
                         }
                         else
                             attempt = 0;
@@ -297,10 +297,20 @@ namespace NadekoBot.Modules.Music.Classes
 
                 if (video == null) // do something with this error
                     throw new Exception("Could not load any video elements based on the query.");
-                var m = Regex.Match(query, @"\?t=(?<t>\d*)");
+                var m = Regex.Match(query, @"\?t=((?<h>\d*)h)?((?<m>\d*)m)?((?<s>\d*)s?)?");
                 int gotoTime = 0;
                 if (m.Captures.Count > 0)
-                    int.TryParse(m.Groups["t"].ToString(), out gotoTime);
+                {
+                    int hours;
+                    int minutes;
+                    int seconds;
+
+                    int.TryParse(m.Groups["h"].ToString(), out hours);
+                    int.TryParse(m.Groups["m"].ToString(), out minutes);
+                    int.TryParse(m.Groups["s"].ToString(), out seconds);
+
+                    gotoTime = hours * 60 * 60 + minutes * 60 + seconds;
+                }
                 var song = new Song(new SongInfo
                 {
                     Title = video.Title.Substring(0, video.Title.Length - 10), // removing trailing "- You Tube"
@@ -348,7 +358,7 @@ namespace NadekoBot.Modules.Music.Classes
             }
             if (query.Contains(".m3u"))
             {
-                /* 
+                /*
 # This is a comment
                    C:\xxx4xx\xxxxxx3x\xx2xxxx\xx.mp3
                    C:\xxx5xx\x6xxxxxx\x7xxxxx\xx.mp3

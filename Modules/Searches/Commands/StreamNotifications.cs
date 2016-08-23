@@ -70,7 +70,7 @@ namespace NadekoBot.Modules.Searches.Commands
                 catch { }
                 await ConfigHandler.SaveConfig().ConfigureAwait(false);
             };
-            checkTimer.Start();
+            NadekoBot.OnReady += checkTimer.Start;
         }
 
         private async Task<Tuple<bool, string>> GetStreamStatus(StreamNotificationConfig stream, bool checkCache = true)

@@ -1,4 +1,4 @@
-﻿using Discord;
+using Discord;
 using Discord.Commands;
 using NadekoBot.Classes;
 using System.Collections.Concurrent;
@@ -6,15 +6,15 @@ using System.Linq;
 using System.Threading.Tasks;
 
 /* Voltana's legacy
-public class AsyncLazy<T> : Lazy<Task<T>> 
-{ 
-    public AsyncLazy(Func<T> valueFactory) : 
+public class AsyncLazy<T> : Lazy<Task<T>>
+{
+    public AsyncLazy(Func<T> valueFactory) :
         base(() => Task.Factory.StartNew(valueFactory)) { }
 
-    public AsyncLazy(Func<Task<T>> taskFactory) : 
-        base(() => Task.Factory.StartNew(() => taskFactory()).Unwrap()) { } 
+    public AsyncLazy(Func<Task<T>> taskFactory) :
+        base(() => Task.Factory.StartNew(() => taskFactory()).Unwrap()) { }
 
-    public TaskAwaiter<T> GetAwaiter() { return Value.GetAwaiter(); } 
+    public TaskAwaiter<T> GetAwaiter() { return Value.GetAwaiter(); }
 }
 */
 
@@ -31,8 +31,12 @@ namespace NadekoBot.Modules.Administration.Commands
         {
             AnnouncementsDictionary = new ConcurrentDictionary<ulong, AnnounceControls>();
 
-            NadekoBot.Client.UserJoined += UserJoined;
-            NadekoBot.Client.UserLeft += UserLeft;
+            //gotta subscribe after ready, to prevent trying to send these before all guilds are initialized
+            NadekoBot.OnReady += () =>
+            {
+                NadekoBot.Client.UserJoined += UserJoined;
+                NadekoBot.Client.UserLeft += UserLeft;
+            };
 
             var data = Classes.DbHandler.Instance.GetAllRows<DataModels.Announcement>();
 
@@ -245,7 +249,7 @@ namespace NadekoBot.Modules.Administration.Commands
                 });
 
             cgb.CreateCommand(Module.Prefix + "greetmsg")
-                .Description($"Sets a new join announcement message. Type %user% if you want to mention the new member. Using it with no message will show the current greet message. **Needs Manage Server Permissions.**| `{Prefix}greetmsg Welcome to the server, %user%.`")
+                .Description($"Sets a new join announcement message. Type %user% if you want to mention the new member. Using it with no message will show the current greet message. **Needs Manage Server Permissions.**| `{Prefix}greetmsg Welcome, %user%.`")
                 .Parameter("msg", ParameterType.Unparsed)
                 .Do(async e =>
                 {
@@ -278,7 +282,7 @@ namespace NadekoBot.Modules.Administration.Commands
                 });
 
             cgb.CreateCommand(Module.Prefix + "byemsg")
-                .Description($"Sets a new leave announcement message. Type %user% if you want to mention the new member. Using it with no message will show the current bye message. **Needs Manage Server Permissions.**| `{Prefix}byemsg %user% has left the server.`")
+                .Description($"Sets a new leave announcement message. Type %user% if you want to mention the new member. Using it with no message will show the current bye message. **Needs Manage Server Permissions.**| `{Prefix}byemsg %user% has left.`")
                 .Parameter("msg", ParameterType.Unparsed)
                 .Do(async e =>
                 {

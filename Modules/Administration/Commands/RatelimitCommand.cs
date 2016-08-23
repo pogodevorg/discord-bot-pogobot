@@ -16,12 +16,12 @@ namespace NadekoBot.Modules.Administration.Commands
 
         public RatelimitCommand(DiscordModule module) : base(module)
         {
-            NadekoBot.Client.MessageReceived += async (s, e) =>
+            NadekoBot.OnReady += () => NadekoBot.Client.MessageReceived += async (s, e) =>
             {
                 if (e.Channel.IsPrivate || e.User.Id == NadekoBot.Client.CurrentUser.Id)
                     return;
                 if (NadekoBot.IsOwner(e.User.Id)) return;
-                try { 
+                try {
                 var role_devs = e.Server.FindRoles("Developers").FirstOrDefault();
                 var role_admins = e.Server.FindRoles("Administrators").FirstOrDefault();
                 var role_mods = e.Server.FindRoles("Moderators").FirstOrDefault();

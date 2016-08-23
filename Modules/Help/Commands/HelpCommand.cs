@@ -72,7 +72,7 @@ $@"######For more information and how to setup your own NadekoBot, go to: <http:
 #if DEBUG
             File.WriteAllText("../../../commandlist.md", helpstr);
 #else
-            File.WriteAllText("commandlist.md", helpstr);
+            File.WriteAllText("commandlist.md", helpstr.ToString());
 #endif
         };
 
