@@ -321,15 +321,18 @@ namespace NadekoBot.Modules.Administration
                                 }
                                 if (!string.IsNullOrWhiteSpace(msg))
                                 {
-                                    await e.Server.GetChannel(211351526466125824).SendMessage("BANNED USER " + $"`{usr.Name.ToString()}`:\n```" + $"ID: {usr.Id}\n" + $"Reason: {msg}" + "```").ConfigureAwait(false);
+                                    await e.Server.GetChannel(211351526466125824).SendMessage("`"+ e.User.Name + "` BANNED USER " + $"`{usr.Name.ToString()}`:\n```" + $"ID: {usr.Id}\n" + $"Reason: {msg}" + "```").ConfigureAwait(false);
                                     await usr.SendMessage($"**You have been BANNED from `{e.Server.Name}` server.**\n" +
                                                           $"Reason: {msg}").ConfigureAwait(false);
                                     await Task.Delay(2000).ConfigureAwait(false); // temp solution; give time for a message to be send, fu volt
                                 }
                                 try
                                 {
+                                    string[] kicks = new string[] { "/root/kick.gif", "/root/kick1.gif", "/root/kick2.gif", "/root/kick3.gif", "/root/kick4.gif", "/root/kick5.gif", "/root/kick6.gif" };
+                                    Random rnd = new Random();
                                     await e.Server.Ban(usr, 7).ConfigureAwait(false);
 
+                                    await e.Channel.SendFile(kicks[rnd.Next(kicks.Length)]).ConfigureAwait(false);
                                     await e.Channel.SendMessage("Banned user " + usr.Name + " Id: " + usr.Id).ConfigureAwait(false);
                                 }
                                 catch
@@ -365,16 +368,19 @@ namespace NadekoBot.Modules.Administration
                                 }
                                 if (!string.IsNullOrWhiteSpace(msg))
                                 {
-                                    await e.Server.GetChannel(211351526466125824).SendMessage("SOFT-BANNED USER " + $"`{usr.Name.ToString()}`:\n```" + $"ID: {usr.Id}\n" + $"Reason: {msg}" + "```").ConfigureAwait(false);
+                                    await e.Server.GetChannel(211351526466125824).SendMessage("`" + e.User.Name + "` SOFT-BANNED USER " + $"`{usr.Name.ToString()}`:\n```" + $"ID: {usr.Id}\n" + $"Reason: {msg}" + "```").ConfigureAwait(false);
                                     await usr.SendMessage($"**You have been SOFT-BANNED from `{e.Server.Name}` server.**\n" +
                                                           $"Reason: {msg}").ConfigureAwait(false);
                                     await Task.Delay(2000).ConfigureAwait(false); // temp solution; give time for a message to be send, fu volt
                                 }
                                 try
                                 {
+                                    string[] kicks = new string[] { "/root/kick.gif", "/root/kick1.gif", "/root/kick2.gif", "/root/kick3.gif", "/root/kick4.gif", "/root/kick5.gif", "/root/kick6.gif" };
+                                    Random rnd = new Random();
                                     await e.Server.Ban(usr, 7).ConfigureAwait(false);
                                     await e.Server.Unban(usr).ConfigureAwait(false);
 
+                                    await e.Channel.SendFile(kicks[rnd.Next(kicks.Length)]).ConfigureAwait(false);
                                     await e.Channel.SendMessage("Soft-Banned user " + usr.Name + " Id: " + usr.Id).ConfigureAwait(false);
                                 }
                                 catch
@@ -410,14 +416,17 @@ namespace NadekoBot.Modules.Administration
                             }
                             if (!string.IsNullOrWhiteSpace(msg))
                             {
-                                await e.Server.GetChannel(211351526466125824).SendMessage("KICKED USER " + $"`{usr.Name.ToString()}`:\n```" + $"ID: {usr.Id}\n" + $"Reason: {msg}" + "```").ConfigureAwait(false);
+                                await e.Server.GetChannel(211351526466125824).SendMessage("`" + e.User.Name + "` KICKED USER " + $"`{usr.Name.ToString()}`:\n```" + $"ID: {usr.Id}\n" + $"Reason: {msg}" + "```").ConfigureAwait(false);
                                 await usr.SendMessage($"**You have been KICKED from `{e.Server.Name}` server.**\n" +
                                                       $"Reason: {msg}").ConfigureAwait(false);
                                 await Task.Delay(2000).ConfigureAwait(false); // temp solution; give time for a message to be send, fu volt
                             }
                             try
                             {
+                                string[] kicks = new string[] { "/root/kick.gif", "/root/kick1.gif", "/root/kick2.gif", "/root/kick3.gif", "/root/kick4.gif", "/root/kick5.gif", "/root/kick6.gif" };
+                                Random rnd = new Random();
                                 await usr.Kick().ConfigureAwait(false);
+                                await e.Channel.SendFile(kicks[rnd.Next(kicks.Length)]).ConfigureAwait(false);
                                 await e.Channel.SendMessage("Kicked user " + usr.Name + " Id: " + usr.Id).ConfigureAwait(false);
                             }
                             catch
