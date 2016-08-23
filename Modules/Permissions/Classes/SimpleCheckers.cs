@@ -1,4 +1,4 @@
-﻿using Discord;
+using Discord;
 using Discord.Commands;
 using Discord.Commands.Permissions;
 using System;
@@ -20,6 +20,9 @@ namespace NadekoBot.Modules.Permissions.Classes
 
         public static Func<Command, User, Channel, bool> ManageServer() =>
             (com, user, ch) => user.ServerPermissions.ManageServer;
+
+        public static Func<Command, User, Channel, bool> KickMembersOrManageServer() =>
+            (com, user, ch) => user.ServerPermissions.ManageServer || user.ServerPermissions.KickMembers;
 
         public class ManageRoles : IPermissionChecker
         {

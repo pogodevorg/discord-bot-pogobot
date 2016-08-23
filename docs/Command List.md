@@ -30,7 +30,7 @@ Command and aliases | Description | Usage
 `.addplaying`, `.adpl` | Adds a specified string to the list of playing strings to rotate. Supported placeholders: %servers%, %users%, %playing%, %queued%, %trivia% **Bot Owner Only!**| `.adpl`
 `.listplaying`, `.lipl` | Lists all playing statuses with their corresponding number. **Bot Owner Only!**| `.lipl`
 `.removeplaying`, `.repl`, `.rmpl` | Removes a playing string on a given number. **Bot Owner Only!**| `.rmpl`
-`.slowmode` | Toggles slow mode. When ON, users will be able to send only 1 message every 5 seconds. **Needs Manage Messages Permissions.**| `.slowmode`
+`.slowmode` | Toggles slow mode. When ON, users will be able to send only 1 message every X seconds. **Needs Manage Messages or Kick Members Permissions.**| `.slowmode X`
 `.cleanv+t`, `.cv+t` | Deletes all text channels ending in `-voice` for which voicechannels are not found. **Use at your own risk. Needs Manage Roles and Manage Channels Permissions.** | `.cleanv+t`
 `.voice+text`, `.v+t` | Creates a text channel for each voice channel only users in that voice channel can see.If you are server owner, keep in mind you will see them all the time regardless. **Needs Manage Roles and Manage Channels Permissions.**| `.voice+text`
 `.scsc` | Starts an instance of cross server channel. You will get a token as a DM that other people will use to tune in to the same instance. **Bot Owner Only.** | `.scsc`

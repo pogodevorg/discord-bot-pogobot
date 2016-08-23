@@ -51,8 +51,8 @@ namespace NadekoBot.Modules.Administration.Commands
         internal override void Init(CommandGroupBuilder cgb)
         {
             cgb.CreateCommand(Module.Prefix + "slowmode")
-                .Description($"Toggles slow mode. When ON, users will be able to send only 1 message every " + slowtime + " seconds. **Needs Manage Messages Permissions.**| `{Prefix}slowmode`")
-                .AddCheck(SimpleCheckers.ManageMessages())
+                .Description($"Toggles slow mode. When ON, users will be able to send only 1 message every " + slowtime + " seconds. **Needs Manage Messages or Kick Members Permissions.**| `{Prefix}slowmode`")
+                .AddCheck(SimpleCheckers.KickMembersOrManageServer())
                 .Parameter("msg", ParameterType.Unparsed)
                 .Do(async e =>
                 {
