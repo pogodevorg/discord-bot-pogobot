@@ -13,7 +13,7 @@ namespace NadekoBot.Modules.Administration.Commands
 {
     internal class LogCommand : DiscordCommand
     {
-        private string prettyCurrentTime => $"【{DateTime.Now:HH:mm:ss}】";
+        private string prettyCurrentTime => $"{DateTime.Now.ToUniversalTime().ToString("yyyy-MM-dd 【HH:mm:ss】 UTC")}";
 
         private ConcurrentBag<KeyValuePair<Channel, string>> voicePresenceUpdates = new ConcurrentBag<KeyValuePair<Channel, string>>();
 
