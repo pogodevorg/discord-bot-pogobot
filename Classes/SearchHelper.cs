@@ -345,13 +345,17 @@ namespace NadekoBot.Classes
                 var httpWebRequest =
                     (HttpWebRequest)WebRequest.Create("https://www.googleapis.com/urlshortener/v1/url?key=" +
                                                        NadekoBot.Creds.GoogleAPIKey);
+                string post = "{\"longUrl\": \"" + url + "\"}";
                 httpWebRequest.ContentType = "application/json";
+                httpWebRequest.ServicePoint.Expect100Continue = false;
                 httpWebRequest.Method = "POST";
+                httpWebRequest.ContentLength = post.Length;
+                httpWebRequest.Headers.Add("Cache-Control", "no-cache");
 
-                using (var streamWriter = new StreamWriter(await httpWebRequest.GetRequestStreamAsync().ConfigureAwait(false)))
+                using (Stream requestStream = httpWebRequest.GetRequestStream())
                 {
-                    var json = "{\"longUrl\":\"" + Uri.EscapeDataString(url) + "\"}";
-                    streamWriter.Write(json);
+                    byte[] postBuffer = System.Text.Encoding.ASCII.GetBytes(post);
+                    requestStream.Write(postBuffer, 0, postBuffer.Length);
                 }
 
                 var httpResponse = (await httpWebRequest.GetResponseAsync().ConfigureAwait(false)) as HttpWebResponse;
