@@ -21,7 +21,8 @@
 1. `git clone https://github.com/Kwoth/NadekoBot.git`
 2. `git submodule init`
 3. `git submodule update`
-4. `Compile`
+4. `Download .zip and replace NadekoBot with this repos`
+5. `Compile & Configure & Run`
 
 ## Documentation
 1. [Commands List](https://github.com/pogodevorg/discord-bot-pogobot/blob/master/docs/Command%20List.md)
