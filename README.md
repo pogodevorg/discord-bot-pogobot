@@ -1,9 +1,8 @@
 [![POGODEV](https://github.com/pogodevorg/assets/blob/master/public/img/logo-github.png?raw=true)](https://pogodev.org)
 
-# discord-bot-pogobot [![Build Status](https://img.shields.io/travis/pogodev/discord-bot-pogobot/master.svg)](https://img.shields.io/travis/pogodev/discord-bot-pogobot) [![Coverage Status](https://coveralls.io/repos/github/pogodevorg/discord-bot-pogobot/badge.svg?branch=master)](https://coveralls.io/github/pogodevorg/discord-bot-pogobot?branch=master) [![license](https://img.shields.io/github/license/pogodevorg/discord-bot-pogobot.svg?maxAge=2592000?style=flat-square)](#)
+# discord-bot-pogobot [![Build Status](https://img.shields.io/travis/pogodevorg/discord-bot-pogobot/master.svg)](https://img.shields.io/travis/pogodevorg/discord-bot-pogobot) [![Coverage Status](https://coveralls.io/repos/github/pogodevorg/discord-bot-pogobot/badge.svg?branch=master)](https://coveralls.io/github/pogodevorg/discord-bot-pogobot?branch=master) [![license](https://img.shields.io/github/license/pogodevorg/discord-bot-pogobot.svg?maxAge=2592000?style=flat-square)](#)
 
 ## Table of Contents
-
 * [What is it?](#what-is-it)
 * [Installation](#installation)
 * [Documentation](#documentation)
