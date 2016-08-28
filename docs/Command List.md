@@ -125,13 +125,13 @@ Command and aliases | Description | Usage
 `;chnlperms`, `;cp` | Shows banned permissions for a certain channel. No argument means for this channel. | `;cp #dev`
 `;userperms`, `;up` | Shows banned permissions for a certain user. No argument means for yourself. | `;up Kwoth`
 `;srvrmdl`, `;sm` | Sets a module's permission at the server level. | `;sm "module name" enable`
-`;srvrcmd`, `;sc` | Sets a command's permission at the server level. | `;sc "command name" disable`
+`;srvrcmd`, `;sc` | Sets a command's permission at the server level. | `;sc "{prefix}command name" disable`
 `;rolemdl`, `;rm` | Sets a module's permission at the role level. | `;rm "module name" enable MyRole`
-`;rolecmd`, `;rc` | Sets a command's permission at the role level. | `;rc "command name" disable MyRole`
+`;rolecmd`, `;rc` | Sets a command's permission at the role level. | `;rc "{prefix}command name" disable MyRole`
 `;chnlmdl`, `;cm` | Sets a module's permission at the channel level. | `;cm "module name" enable SomeChannel`
-`;chnlcmd`, `;cc` | Sets a command's permission at the channel level. | `;cc "command name" enable SomeChannel`
+`;chnlcmd`, `;cc` | Sets a command's permission at the channel level. | `;cc "{prefix}command name" enable SomeChannel`
 `;usrmdl`, `;um` | Sets a module's permission at the user level. | `;um "module name" enable SomeUsername`
-`;usrcmd`, `;uc` | Sets a command's permission at the user level. | `;uc "command name" enable SomeUsername`
+`;usrcmd`, `;uc` | Sets a command's permission at the user level. | `;uc "{prefix}command name" enable SomeUsername`
 `;allsrvrmdls`, `;asm` | Sets permissions for all modules at the server level. | `;asm [enable/disable]`
 `;allsrvrcmds`, `;asc` | Sets permissions for all commands from a certain module at the server level. | `;asc "module name" [enable/disable]`
 `;allchnlmdls`, `;acm` | Sets permissions for all modules at the channel level. | `;acm [enable/disable] SomeChannel`
