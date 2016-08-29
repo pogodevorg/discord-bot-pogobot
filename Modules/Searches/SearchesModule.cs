@@ -326,7 +326,7 @@ $@"🌍 **Weather for** 【{obj["target"]}】
                           var sb = new System.Text.StringBuilder();
                           sb.AppendLine($"`Term:` {items["list"][0]["word"].ToString()}");
                           sb.AppendLine($"`Definition:` {items["list"][0]["definition"].ToString()}");
-                          sb.Append($"`Link:` <{items["list"][0]["permalink"].ToString()}>");
+                          sb.Append($"`Link:` <{await items["list"][0]["permalink"].ToString().ShortenUrl().ConfigureAwait(false)}>");
                           await e.Channel.SendMessage(sb.ToString());
                       }
                       catch
