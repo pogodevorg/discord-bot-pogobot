@@ -1,7 +1,7 @@
 [![POGODEV](https://github.com/pogodevorg/assets/blob/master/public/img/logo-github.png?raw=true)](https://pogodev.org)
 
 # discord-bot-pogobot
-[![Build Status](https://travis-ci.org/pogodevorg/discord-bot-pogobot.svg?branch=master)](https://travis-ci.org/pogodevorg/discord-bot-pogobot) [![Code Climate](https://codeclimate.com/github/pogodevorg/discord-bot-pogobot/badges/gpa.svg)](https://codeclimate.com/github/pogodevorg/discord-bot-pogobot) [![Issue Count](https://codeclimate.com/github/pogodevorg/discord-bot-pogobot/badges/issue_count.svg)](https://codeclimate.com/github/pogodevorg/discord-bot-pogobot) [![license](https://img.shields.io/github/license/pogodevorg/discord-bot-pogobot.svg?maxAge=2592000?style=flat-square)](https://github.com/pogodevorg/discord-bot-pogobot/blob/master/LICENSE.md)
+[![Build Status](https://travis-ci.org/pogodevorg/discord-bot-pogobot.svg?branch=master)](https://travis-ci.org/pogodevorg/discord-bot-pogobot) [![Code Climate](https://codeclimate.com/github/pogodevorg/discord-bot-pogobot/badges/gpa.svg)](https://codeclimate.com/github/pogodevorg/discord-bot-pogobot) [![Issue Count](https://codeclimate.com/github/pogodevorg/discord-bot-pogobot/badges/issue_count.svg)](https://codeclimate.com/github/pogodevorg/discord-bot-pogobot) [![license](https://img.shields.io/github/license/pogodevorg/discord-bot-pogobot.svg?maxAge=2592000?style=flat-square)](https://github.com/pogodevorg/discord-bot-pogobot/blob/master/LICENSE)
 
 ## Table of Contents
 * [What is it?](#what-is-it)
@@ -18,10 +18,10 @@
 
 ## Installation
 ### Windows
-1. `git clone https://github.com/Kwoth/NadekoBot.git`
+1. `git clone https://github.com/pogodevorg/discord-bot-pogobot.git`
 2. `git submodule init`
 3. `git submodule update`
-4. `Download .zip and replace NadekoBot with this repos`
+4. `Download .zip and replace discord-bot-pogobot with this repos`
 5. `Compile & Configure & Run`
 
 ## Documentation
