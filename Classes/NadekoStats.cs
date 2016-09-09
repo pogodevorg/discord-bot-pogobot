@@ -7,7 +7,9 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
+#if NADEKO_RELEASE
 using System.IO;
+#endif
 using System.Linq;
 using System.Net.Http;
 using System.Reflection;
@@ -45,7 +47,6 @@ namespace NadekoBot
             statsStopwatch.Start();
 
             commandService.CommandExecuted += StatsCollector_RanCommand;
-            commandService.CommandFinished += CommandService_CommandFinished;
             commandService.CommandErrored += CommandService_CommandFinished;
 
             Task.Run(StartCollecting);
@@ -227,6 +228,7 @@ namespace NadekoBot
             DateTime dt;
             if (!commandTracker.TryGetValue(e.Message.Id, out dt))
                 return;
+#if NADEKO_RELEASE
             try
             {
                 if (e is CommandErrorEventArgs)
@@ -248,18 +250,19 @@ namespace NadekoBot
                 }
             }
             catch { }
+#endif
         }
 
         private async void StatsCollector_RanCommand(object sender, CommandEventArgs e)
         {
             commandTracker.TryAdd(e.Message.Id, DateTime.UtcNow);
             Console.WriteLine($">>COMMAND STARTED\nCmd: {e.Command.Text}\nMsg: {e.Message.Text}\nUsr: {e.User.Name} [{e.User.Id}]\nSrvr: {e.Server?.Name ?? "PRIVATE"} [{e.Server?.Id}]\n-----");
+            commandsRan++;
 #if !NADEKO_RELEASE
             await Task.Run(() =>
             {
                 try
                 {
-                    commandsRan++;
                     Classes.DbHandler.Instance.Connection.Insert(new DataModels.Command
                     {
                         ServerId = (long)(e.Server?.Id ?? 0),
