@@ -8,6 +8,8 @@ if [ -d $artifactsFolder ]; then
   rm -R $artifactsFolder
 fi
 
+git submodule update --init --recursive
+
 dotnet restore
 dotnet build ./src/NadekoBot -c Release
 

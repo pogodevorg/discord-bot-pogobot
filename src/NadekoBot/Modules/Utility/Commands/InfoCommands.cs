@@ -89,12 +89,17 @@ namespace NadekoBot.Modules.Utility
             var user = usr ?? msg.Author as IGuildUser;
             if (user == null)
                 return;
+            TimeSpan difference = (TimeSpan) (DateTimeOffset.Now - user.JoinedAt);
+            var days = (int)difference.TotalDays;
+            var hours = (int)difference.TotalHours;
+            var minutes = (int)difference.TotalMinutes;
             var toReturn = $"`Name#Discrim:` **#{user.Username}#{user.Discriminator}**\n";
             if (!string.IsNullOrWhiteSpace(user.Nickname))
                 toReturn += $"`Nickname:` **{user.Nickname}**";
             toReturn += $@"`Id:` **{user.Id}**
 `Current Game:` **{(user.Game?.Name == null ? "-" : user.Game.Name)}**
 `Joined Server:` **{user.JoinedAt?.ToString("dd.MM.yyyy HH:mm")}** 
+`Total Session (days:hours:minutes):` **{days}:{hours}:{minutes}**
 `Joined Discord:` **{user.CreatedAt.ToString("dd.MM.yyyy HH:mm")}**
 `Roles:` **({user.Roles.Count()}) - {string.Join(", ", user.Roles.Select(r => r.Name)).SanitizeMentions()}**
 `AvatarUrl:` **{await NadekoBot.Google.ShortenUrl(user.AvatarUrl).ConfigureAwait(false)}**";
