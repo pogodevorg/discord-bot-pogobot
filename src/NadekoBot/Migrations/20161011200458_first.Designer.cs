@@ -7,7 +7,7 @@ using NadekoBot.Services.Database.Impl;
 
 namespace NadekoBot.Migrations
 {
-    [DbContext(typeof(NadekoSqliteContext))]
+    [DbContext(typeof(NadekoContext))]
     [Migration("20161011200458_first")]
     partial class first
     {

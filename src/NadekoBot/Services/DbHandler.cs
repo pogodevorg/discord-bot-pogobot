@@ -1,25 +1,24 @@
-﻿using NadekoBot.Services.Database;
-using NadekoBot.Services.Database.Impl;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.EntityFrameworkCore;
+using NadekoBot.Services.Database;
 
 namespace NadekoBot.Services
 {
     public class DbHandler
     {
-        private Type dbType;
 
         private static DbHandler _instance = null;
         public static DbHandler Instance = _instance ?? (_instance = new DbHandler());
-        
+        private readonly DbContextOptions options;
+
+        private string connectionString { get; }
 
         static DbHandler() { }
 
         private DbHandler() {
-            dbType = typeof(NadekoSqliteContext);
+            connectionString = NadekoBot.Credentials.Db.ConnectionString;
+            var optionsBuilder = new DbContextOptionsBuilder();
+            optionsBuilder.UseSqlite(NadekoBot.Credentials.Db.ConnectionString);
+            options = optionsBuilder.Options;
             //switch (NadekoBot.Credentials.Db.Type.ToUpperInvariant())
             //{
             //    case "SQLITE":
@@ -34,8 +33,9 @@ namespace NadekoBot.Services
             //}
         }
 
-        public NadekoContext GetDbContext() => 
-            Activator.CreateInstance(dbType) as NadekoContext;
+
+        public NadekoContext GetDbContext() =>
+            new NadekoContext(options);
 
         public IUnitOfWork GetUnitOfWork() =>
             new UnitOfWork(GetDbContext());

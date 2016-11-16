@@ -20,6 +20,7 @@ using NadekoBot.TypeReaders;
 using System.Collections.Concurrent;
 using NadekoBot.Modules.Music;
 using NadekoBot.Services.Database.Models;
+using Microsoft.Extensions.Configuration;
 
 namespace NadekoBot
 {
@@ -43,6 +44,9 @@ namespace NadekoBot
 
         static NadekoBot()
         {
+          SetupLogger();
+          Credentials = new BotCredentials();
+
             using (var uow = DbHandler.UnitOfWork())
             {
                 AllGuildConfigs = uow.GuildConfigs.GetAll();
@@ -105,7 +109,7 @@ namespace NadekoBot
             // start handling messages received in commandhandler
             await CommandHandler.StartHandling().ConfigureAwait(false);
 
-            await CommandService.LoadAssembly(Assembly.GetEntryAssembly(), depMap).ConfigureAwait(false);
+            await CommandService.LoadAssembly(this.GetType().GetTypeInfo().Assembly, depMap).ConfigureAwait(false);
 #if !GLOBAL_NADEKO
             await CommandService.Load(new Music(Localizer, CommandService, Client, Google)).ConfigureAwait(false);
 #endif
@@ -119,7 +123,7 @@ namespace NadekoBot
             await Task.Delay(-1).ConfigureAwait(false);
         }
 
-        private void SetupLogger()
+        private static void SetupLogger()
         {
             try
             {

@@ -1,10 +1,11 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using Discord;
 using System.Linq;
 using NLog;
+using Microsoft.Extensions.Configuration;
 
 namespace NadekoBot.Services.Impl
 {
@@ -27,44 +28,66 @@ namespace NadekoBot.Services.Impl
         public string OsuApiKey { get; }
         public string SoundCloudClientId { get; }
 
-        public DB Db { get; }
+        public DBConfig Db { get; }
         public int TotalShards { get; }
+        public string CarbonKey { get; }
+
+        public string credsFileName { get; } = Path.Combine(Directory.GetCurrentDirectory(), "credentials.json");
 
         public BotCredentials()
         {
             _log = LogManager.GetCurrentClassLogger();
 
             try { File.WriteAllText("./credentials_example.json", JsonConvert.SerializeObject(new CredentialsModel(), Formatting.Indented)); } catch { }
-            if (File.Exists("./credentials.json"))
+            if(!File.Exists(credsFileName))
+                _log.Warn($"credentials.json is missing. Attempting to load creds from environment variables prefixed with 'NadekoBot_'. Example is in {Path.GetFullPath("./credentials_example.json")}");
+            try
             {
-                var cm = JsonConvert.DeserializeObject<CredentialsModel>(File.ReadAllText("./credentials.json"));
-                Token = cm.Token;
-                OwnerIds = cm.OwnerIds;
-                LoLApiKey = cm.LoLApiKey;
-                GoogleApiKey = cm.GoogleApiKey;
-                MashapeKey = cm.MashapeKey;
-                OsuApiKey = cm.OsuApiKey;
-                TotalShards = cm.TotalShards < 1 ? 1 : cm.TotalShards;
-                BotId = cm.BotId ?? cm.ClientId;
-                ClientId = cm.ClientId;
-                SoundCloudClientId = cm.SoundCloudClientId;
-                if (cm.Db == null)
-                    Db = new DB("sqlite", "");
-                else
-                    Db = new DB(cm.Db.Type, cm.Db.ConnectionString);
+                var configBuilder = new ConfigurationBuilder();
+                configBuilder.AddJsonFile(credsFileName, true)
+                    .AddEnvironmentVariables("NadekoBot_");
+
+                var data = configBuilder.Build();
+
+                Token = data[nameof(Token)];
+                if (string.IsNullOrWhiteSpace(Token))
+                    throw new ArgumentNullException(nameof(Token), "Token is missing from credentials.json or Environment varibles.");
+                OwnerIds = data.GetSection("OwnerIds").GetChildren().Select(c => ulong.Parse(c.Value)).ToArray();
+                LoLApiKey = data[nameof(LoLApiKey)];
+                GoogleApiKey = data[nameof(GoogleApiKey)];
+                MashapeKey = data[nameof(MashapeKey)];
+                OsuApiKey = data[nameof(OsuApiKey)];
+
+                int ts = 1;
+                int.TryParse(data[nameof(TotalShards)], out ts);
+                TotalShards = ts < 1 ? 1 : ts;
+
+                ulong clId = 0;
+                ulong.TryParse(data[nameof(ClientId)], out clId);
+                ClientId = clId;
+
+                SoundCloudClientId = data[nameof(SoundCloudClientId)];
+                CarbonKey = data[nameof(CarbonKey)];
+                var dbSection = data.GetSection("db");
+                Db = new DBConfig(string.IsNullOrWhiteSpace(dbSection["Type"])
+                                ? "sqlite"
+                                : dbSection["Type"],
+                            string.IsNullOrWhiteSpace(dbSection["ConnectionString"])
+                                ? "Filename=./data/NadekoBot.db"
+                                : dbSection["ConnectionString"]);
             }
-            else
+            catch (Exception ex)
             {
-                _log.Fatal($"credentials.json is missing. Failed to start. Example is in {Path.GetFullPath("./credentials_example.json")}");
-                throw new FileNotFoundException();
+                _log.Fatal(ex.Message);
+                _log.Fatal(ex);
+                throw;
             }
-            
+
         }
 
         private class CredentialsModel
         {
             public ulong ClientId { get; set; } = 123123123;
-            public ulong? BotId { get; set; }
             public string Token { get; set; } = "";
             public ulong[] OwnerIds { get; set; } = new ulong[1];
             public string LoLApiKey { get; set; } = "";
@@ -72,7 +95,8 @@ namespace NadekoBot.Services.Impl
             public string MashapeKey { get; set; } = "";
             public string OsuApiKey { get; set; } = "";
             public string SoundCloudClientId { get; set; } = "";
-            public DB Db { get; set; }
+            public string CarbonKey { get; set; } = "";
+            public DBConfig Db { get; set; } = new DBConfig("sqlite", "Filename=./data/NadekoBot.db");
             public int TotalShards { get; set; } = 1;
         }
 

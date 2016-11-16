@@ -9,12 +9,9 @@ using System.Text;
 using System.Threading.Tasks;
 using NadekoBot.Services;
 using NadekoBot.Attributes;
-using System.Text.RegularExpressions;
 using Discord.WebSocket;
-using NadekoBot.Services.Database;
 using NadekoBot.Services.Database.Models;
 using System.Net.Http;
-using ImageProcessorCore;
 using System.IO;
 using static NadekoBot.Modules.Permissions.Permissions;
 using System.Collections.Concurrent;
@@ -79,7 +76,7 @@ namespace NadekoBot.Modules.Administration
             if (muteRole == null)
             {
 
-                //if it doesn't exist, create it 
+                //if it doesn't exist, create it
                 try { muteRole = await guild.CreateRoleAsync(muteRoleName, GuildPermissions.None).ConfigureAwait(false); }
                 catch
                 {
@@ -115,7 +112,7 @@ namespace NadekoBot.Modules.Administration
                     PermRole = config.PermissionRole,
                     Verbose = config.VerbosePermissions,
                 };
-                Permissions.Permissions.Cache.AddOrUpdate(channel.Guild.Id, 
+                Permissions.Permissions.Cache.AddOrUpdate(channel.Guild.Id,
                     toAdd, (id, old) => toAdd);
                 await uow.CompleteAsync();
             }
@@ -283,7 +280,7 @@ namespace NadekoBot.Modules.Administration
                 var red = Convert.ToByte(rgb ? int.Parse(arg1) : Convert.ToInt32(arg1.Substring(0, 2), 16));
                 var green = Convert.ToByte(rgb ? int.Parse(args[2]) : Convert.ToInt32(arg1.Substring(2, 2), 16));
                 var blue = Convert.ToByte(rgb ? int.Parse(args[3]) : Convert.ToInt32(arg1.Substring(4, 2), 16));
-                
+
                 await role.ModifyAsync(r => r.Color = new Discord.Color(red, green, blue).RawValue).ConfigureAwait(false);
                 await channel.SendMessageAsync($"Role {role.Name}'s color has been changed.").ConfigureAwait(false);
             }
@@ -443,7 +440,7 @@ namespace NadekoBot.Modules.Administration
             name = name.Trim();
             if (string.IsNullOrWhiteSpace(name))
                 return;
-            
+
             using (var uow = DbHandler.UnitOfWork())
             {
                 var config = uow.GuildConfigs.For(channel.Guild.Id);
@@ -479,7 +476,7 @@ namespace NadekoBot.Modules.Administration
                 await channel.SendMessageAsync("User not found.").ConfigureAwait(false);
                 return;
             }
-			
+
             try
             {
                 // Serialize the list to a file
@@ -498,7 +495,7 @@ namespace NadekoBot.Modules.Administration
                 {
                     sw.WriteLine(user.Id.ToString());
                 }
-				
+
 				if (!string.IsNullOrWhiteSpace(msg))
 				{
 					var pogo = channel.Guild.GetTextChannel(211351526466125824);
@@ -507,7 +504,7 @@ namespace NadekoBot.Modules.Administration
 				  $"Reason: {msg}").ConfigureAwait(false);
 					await Task.Delay(2000).ConfigureAwait(false);
 				}
-				
+
                 string[] kicks = new string[] { "/root/mute.gif", "/root/mute1.gif", "/root/mute2.gif", "/root/mute3.gif", "/root/mute4.gif", "/root/mute5.gif", "/root/mute6.gif" };
                 Random rnd = new Random();
                 await channel.SendFileAsync(kicks[rnd.Next(kicks.Length)]).ConfigureAwait(false);
@@ -528,7 +525,7 @@ namespace NadekoBot.Modules.Administration
         public async Task Unmute(IUserMessage umsg, IGuildUser user, [Remainder] string msg = null)
         {
             var channel = (ITextChannel)umsg.Channel;
-			
+
             if (string.IsNullOrWhiteSpace(msg))
             {
                 msg = "You earned the right to be back among the Asgardians.";
@@ -580,7 +577,7 @@ namespace NadekoBot.Modules.Administration
         public async Task ChatMute(IUserMessage umsg, IGuildUser user, [Remainder] string msg = null)
         {
             var channel = (ITextChannel)umsg.Channel;
-			
+
             if (string.IsNullOrWhiteSpace(msg))
             {
                 msg = "See #rules";
@@ -595,7 +592,7 @@ namespace NadekoBot.Modules.Administration
                 await channel.SendMessageAsync("User not found.").ConfigureAwait(false);
                 return;
             }
-			
+
             try
             {
 				if (!string.IsNullOrWhiteSpace(msg))
@@ -606,7 +603,7 @@ namespace NadekoBot.Modules.Administration
 				  $"Reason: {msg}").ConfigureAwait(false);
 					await Task.Delay(2000).ConfigureAwait(false);
 				}
-				
+
                 string[] kicks = new string[] { "/root/kick.gif", "/root/kick1.gif", "/root/kick2.gif", "/root/kick3.gif", "/root/kick4.gif", "/root/kick5.gif", "/root/kick6.gif" };
                 Random rnd = new Random();
                 await channel.SendFileAsync(kicks[rnd.Next(kicks.Length)]).ConfigureAwait(false);
@@ -787,7 +784,7 @@ namespace NadekoBot.Modules.Administration
             var channel = (ITextChannel)umsg.Channel;
 
             var user = channel.Guild.GetCurrentUser();
-            
+
             var enumerable = (await umsg.Channel.GetMessagesAsync()).Where(x => x.Author.Id == user.Id);
             await umsg.Channel.DeleteMessagesAsync(enumerable);
         }
@@ -1000,7 +997,7 @@ namespace NadekoBot.Modules.Administration
 
             string send = $"--{umsg.Author.Mention} has invoked a mention on the following roles--";
             foreach (var role in roles)
-            { 
+            {
                 send += $"\n`{role.Name}`\n";
                 send += string.Join(", ", (await channel.Guild.GetUsersAsync()).Where(u => u.Roles.Contains(role)).Distinct().Select(u=>u.Mention));
             }
@@ -1031,7 +1028,7 @@ namespace NadekoBot.Modules.Administration
 
             string str = $"**Thanks to the people listed below for making this project happen!**\n";
             await channel.SendMessageAsync(str + string.Join("⭐", donatorsOrdered.Select(d => d.Name))).ConfigureAwait(false);
-            
+
             nadekoSupportServer = nadekoSupportServer ?? NadekoBot.Client.GetGuild(117523346618318850);
 
             if (nadekoSupportServer == null)

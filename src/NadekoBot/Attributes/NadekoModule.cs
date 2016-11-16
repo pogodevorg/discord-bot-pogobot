@@ -1,12 +1,8 @@
 ﻿using Discord.Commands;
 using NadekoBot.Services;
-using NadekoBot.Services.Database;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NadekoBot.Attributes
 {
@@ -43,10 +39,9 @@ namespace NadekoBot.Attributes
                 NadekoBot.ModulePrefixes.TryAdd(moduleName, defaultPrefix);
                 NLog.LogManager.GetCurrentClassLogger().Warn("Prefix not found for {0}. Will use default one: {1}", moduleName, defaultPrefix);
             }
-            
+
 
             return prefix ?? defaultPrefix;
         }
     }
 }
-

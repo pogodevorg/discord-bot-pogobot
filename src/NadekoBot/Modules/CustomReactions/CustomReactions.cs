@@ -1,25 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Discord.Commands;
 using NadekoBot.Services;
 using NadekoBot.Attributes;
-using NadekoBot.Services.Database;
 using System.Collections.Concurrent;
 using NadekoBot.Services.Database.Models;
 using Discord;
 using NadekoBot.Extensions;
 
 namespace NadekoBot.Modules.CustomReactions
-{    
+{
     [NadekoModule("CustomReactions",".")]
     public class CustomReactions : DiscordModule
     {
         public static ConcurrentHashSet<CustomReaction> GlobalReactions { get; } = new ConcurrentHashSet<CustomReaction>();
         public static ConcurrentDictionary<ulong, ConcurrentHashSet<CustomReaction>> GuildReactions { get; } = new ConcurrentDictionary<ulong, ConcurrentHashSet<CustomReaction>>();
-        
+
         static CustomReactions()
         {
             using (var uow = DbHandler.UnitOfWork())

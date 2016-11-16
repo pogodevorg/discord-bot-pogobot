@@ -1,17 +1,10 @@
 ﻿using Discord;
 using Discord.Commands;
-using Discord.WebSocket;
 using NadekoBot.Attributes;
-using NadekoBot.Extensions;
-using NadekoBot.Services;
-using NadekoBot.Services.Database;
 using NLog;
 using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace NadekoBot.Modules.Administration
@@ -181,7 +174,7 @@ namespace NadekoBot.Modules.Administration
                                 catch
                                 {
                                     await gu.Guild.RemoveBanAsync(gu);
-                                    // try it twice, really don't want to ban user if 
+                                    // try it twice, really don't want to ban user if
                                     // only kick has been specified as the punishement
                                 }
                             }
