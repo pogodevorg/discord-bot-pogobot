@@ -147,6 +147,26 @@ $@"🌍 **Weather for** 【{obj["target"]}】
 
             if (string.IsNullOrWhiteSpace(query))
                 return;
+
+            var rng = new NadekoRandom();
+            Task<string> provider = Task.FromResult("");
+            switch (rng.Next(0, 0))
+            {
+                case 0:
+                    provider = GetGoogleImage(query);
+                    break;
+                default:
+                    break;
+            }
+            var link = await provider.ConfigureAwait(false);
+            if (string.IsNullOrWhiteSpace(link))
+                await channel.SendMessageAsync("Search yielded no results ;(").ConfigureAwait(false);
+            else
+                await channel.SendMessageAsync(link).ConfigureAwait(false);
+        }
+
+        public static async Task<string> GetGoogleImage(string query)
+        {
             try
             {
                 using (var http = new HttpClient())
@@ -155,18 +175,18 @@ $@"🌍 **Weather for** 【{obj["target"]}】
                     var reqString = $"https://www.googleapis.com/customsearch/v1?q={Uri.EscapeDataString(query)}&cx=018084019232060951019%3Ahs5piey28-e&num=1&searchType=image&start={ rng.Next(1, 50) }&fields=items%2Flink&key={NadekoBot.Credentials.GoogleApiKey}";
                     var obj = JObject.Parse(await http.GetStringAsync(reqString).ConfigureAwait(false));
                     var items = obj["items"] as JArray;
-                    await channel.SendMessageAsync(items[0]["link"].ToString()).ConfigureAwait(false);
+                    return items[0]["link"].ToString();
                 }
             }
             catch (HttpRequestException exception)
             {
                 if (exception.Message.Contains("403 (Forbidden)"))
                 {
-                    await channel.SendMessageAsync("Daily limit reached!");
+                    return "Daily limit reached!";
                 }
                 else
                 {
-                    await channel.SendMessageAsync("Something went wrong.");
+                    return "Something went wrong.";
                 }
             }
         }
