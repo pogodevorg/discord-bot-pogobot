@@ -11,6 +11,7 @@ namespace NadekoBot.Services
 
         string Token { get; }
         string GoogleApiKey { get; }
+        string ImgurApiKey { get; }
         ulong[] OwnerIds { get; }
         string MashapeKey { get; }
         string LoLApiKey { get; }
