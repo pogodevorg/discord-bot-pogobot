@@ -23,7 +23,8 @@
 3. `Install` [.NET Core](https://www.microsoft.com/net/core#linuxubuntu)
 4. `dotnet restore`
 5. `Configure credentials.json`
-6. `dotnet run -c Release`
+6. `dotnet build -c Release`
+7. `dotnet run -c Release`
 
 ## Documentation
 1. [Commands List](http://nadekobot.readthedocs.io/en/1.0/Commands%20List/)
@@ -41,12 +42,11 @@ Currently, you can contribute to this project by:
 * Submitting a detailed [issue](https://github.com/pogodevorg/discord-bot-pogobot/issues/new).
 * [Forking the project](https://github.com/pogodevorg/discord-bot-pogobot/fork), and sending a pull request back to for review.
 
-### Core Maintainers
-
+### Core Maintainer
 * [![Build Status](https://github.com/fkndean.png?size=36) - fkndean](https://github.com/fkndean)
 
 ## Credits
 
-Credits to Kwoth/NadekoBot for base.
+Credits to [Kwoth/NadekoBot](https://github.com/Kwoth/NadekoBot/tree/1.0) for base.
 
 Modified to work with the PogoDev Discord Server ([https://discord.pogodev.org](https://discord.pogodev.org)).
