@@ -20,14 +20,14 @@
 ### Linux
 1. `git clone https://github.com/pogodevorg/discord-bot-pogobot.git`
 2. `git submodule update --init --recursive`
-3. `Install [netcore](https://www.microsoft.com/net/core#linuxubuntu)`
+3. `Install` [.NET Core](https://www.microsoft.com/net/core#linuxubuntu)
 4. `dotnet restore`
 5. `Configure credentials.json`
 6. `dotnet run -c Release`
 
 ## Documentation
-1. [Commands List](https://github.com/pogodevorg/discord-bot-pogobot/blob/master/docs/Command%20List.md)
-2. [NadekoBot](http://nadekobot.readthedocs.io/en/latest/)
+1. [Commands List](http://nadekobot.readthedocs.io/en/1.0/Commands%20List/)
+2. [NadekoBot](http://nadekobot.readthedocs.io/en/1.0/)
 3. [Discord.NET](http://rtd.discord.foxbot.me/en/legacy/)
 
 ## Licensing
