@@ -1,9 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using JetBrains.Annotations;
 using NadekoBot.Services.Database.Models;
 using NadekoBot.Extensions;
 
@@ -219,6 +216,5 @@ namespace NadekoBot.Services.Database
 
             #endregion
         }
-        protected abstract override void OnConfiguring(DbContextOptionsBuilder optionsBuilder);
     }
 }
