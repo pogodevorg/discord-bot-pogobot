@@ -13,7 +13,6 @@ using NadekoBot.Extensions;
 using System.Net.Http;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
-using NadekoBot.Services.Database;
 using NadekoBot.Services.Database.Models;
 
 namespace NadekoBot.Modules.Music
@@ -38,14 +37,23 @@ namespace NadekoBot.Modules.Music
 
         [NadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
-        public Task Next(IUserMessage umsg)
+        public Task Next(IUserMessage umsg, int skipCount = 1)
         {
             var channel = (ITextChannel)umsg.Channel;
+
+            if (skipCount < 1)
+                return Task.CompletedTask;
 
             MusicPlayer musicPlayer;
             if (!MusicPlayers.TryGetValue(channel.Guild.Id, out musicPlayer)) return Task.CompletedTask;
             if (musicPlayer.PlaybackVoiceChannel == ((IGuildUser)umsg.Author).VoiceChannel)
+            {
+                while (--skipCount > 0)
+                {
+                    musicPlayer.RemoveSongAt(0);
+                }
                 musicPlayer.Next();
+            }
             return Task.CompletedTask;
         }
 
@@ -273,9 +281,8 @@ namespace NadekoBot.Modules.Music
                 {
                     await QueueSong(((IGuildUser)umsg.Author), channel, ((IGuildUser)umsg.Author).VoiceChannel, id, true).ConfigureAwait(false);
                 }
-                catch (PlaylistFullException)
-                { break; }
-                catch { }
+                catch (SongNotFoundException) { }
+                catch { break; }
             }
             await msg.ModifyAsync(m => m.Content = "🎵 `Playlist queue complete.`").ConfigureAwait(false);
         }
@@ -570,6 +577,7 @@ namespace NadekoBot.Modules.Music
                 {
                     await QueueSong(usr, channel, usr.VoiceChannel, item.Query, true, item.ProviderType).ConfigureAwait(false);
                 }
+                catch (SongNotFoundException) { }
                 catch { break; }
             }
             if (msg != null)
@@ -785,6 +793,9 @@ namespace NadekoBot.Modules.Music
                 musicPlayer.ThrowIfQueueFull();
                 resolvedSong = await Song.ResolveSong(query, musicType).ConfigureAwait(false);
 
+                if (resolvedSong == null)
+                    throw new SongNotFoundException();
+
                 musicPlayer.AddSong(resolvedSong, queuer.Username);
             }
             catch (PlaylistFullException)
@@ -799,9 +810,10 @@ namespace NadekoBot.Modules.Music
                     var queuedMessage = await textCh.SendMessageAsync($"🎵`Queued`{resolvedSong.PrettyName} **at** `#{musicPlayer.Playlist.Count + 1}`").ConfigureAwait(false);
                     var t = Task.Run(async () =>
                     {
-                        await Task.Delay(10000).ConfigureAwait(false);
                         try
                         {
+                            await Task.Delay(10000).ConfigureAwait(false);
+                        
                             await queuedMessage.DeleteAsync().ConfigureAwait(false);
                         }
                         catch { }

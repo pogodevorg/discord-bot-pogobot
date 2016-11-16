@@ -188,7 +188,9 @@ namespace NadekoBot.Modules.Music.Classes
         {
             actionQueue.Enqueue(() =>
             {
-                playlist.Shuffle();
+                var oldPlaylist = playlist.ToArray();
+                playlist.Clear();
+                playlist.AddRange(oldPlaylist.Shuffle());
             });
         }
 
@@ -243,7 +245,7 @@ namespace NadekoBot.Modules.Music.Classes
             });
         }
 
-        internal async Task UpdateSongDurationsAsync()
+        public async Task UpdateSongDurationsAsync()
         {
             var curSong = CurrentSong;
             var toUpdate = playlist.Where(s => s.SongInfo.ProviderType == MusicType.Normal &&
