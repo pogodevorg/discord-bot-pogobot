@@ -25,6 +25,8 @@ namespace NadekoBot.Modules.Administration
     public partial class Administration : DiscordModule
     {
 
+        private string prettyCurrentTime => $"{DateTime.Now.ToUniversalTime().ToString("yyyy-MM-dd 【HH:mm:ss】 UTC")}";
+
         private static ConcurrentDictionary<ulong, string> GuildMuteRoles { get; } = new ConcurrentDictionary<ulong, string>();
 
         public Administration(ILocalization loc, CommandService cmds, ShardedDiscordClient client) : base(loc, cmds, client)
@@ -88,12 +90,8 @@ namespace NadekoBot.Modules.Administration
 
                 foreach (var toOverwrite in guild.GetTextChannels())
                 {
-                    try
-                    {
-                        await toOverwrite.AddPermissionOverwriteAsync(muteRole, new OverwritePermissions(sendMessages: PermValue.Deny, attachFiles: PermValue.Deny))
-                                .ConfigureAwait(false);
-                    }
-                    catch { }
+                    await toOverwrite.AddPermissionOverwriteAsync(muteRole, new OverwritePermissions(sendMessages: PermValue.Deny, attachFiles: PermValue.Deny))
+                            .ConfigureAwait(false);
                     await Task.Delay(200).ConfigureAwait(false);
                 }
             }
@@ -123,6 +121,22 @@ namespace NadekoBot.Modules.Administration
             }
 
             await channel.SendMessageAsync($"{imsg.Author.Mention} :ok: `Permissions for this server are reset`");
+        }
+
+        [NadekoCommand, Usage, Description, Aliases]
+        [RequireContext(ContextType.Guild)]
+        [OwnerOnly]
+        public async Task Restart(IUserMessage umsg)
+        {
+            var channel = (ITextChannel)umsg.Channel;
+
+            await channel.SendMessageAsync("`Restarting in 2 seconds...`").ConfigureAwait(false);
+            await Task.Delay(2000).ConfigureAwait(false);
+            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+            {
+                Arguments = "dotnet " + System.Reflection.Assembly.GetEntryAssembly().Location
+            });
+            Environment.Exit(0);
         }
 
         [NadekoCommand, Usage, Description, Aliases]
@@ -287,15 +301,26 @@ namespace NadekoBot.Modules.Administration
             var channel = (ITextChannel)umsg.Channel;
             if (string.IsNullOrWhiteSpace(msg))
             {
-                msg = "No reason provided.";
+                msg = "See #rules";
+            }
+            if (msg.ToString().ToLower() == "bot")
+            {
+                msg = "See #rules, bot discussion is prohibited.";
             }
             if (umsg.Author.Id != user.Guild.OwnerId && user.Roles.Select(r=>r.Position).Max() >= ((IGuildUser)umsg.Author).Roles.Select(r => r.Position).Max())
             {
                 await channel.SendMessageAsync("You can't use this command on users with a role higher or equal to yours in the role hierarchy.");
                 return;
             }
+            if (umsg.Author.Id != user.Guild.OwnerId && user.Roles.Select(r => r.Position).Max() >= ((IGuildUser)umsg.Author).Roles.Select(r => r.Position).Max())
+            {
+                await channel.SendMessageAsync("You can't use this command on users with a role higher or equal to yours in the role hierarchy.");
+                return;
+            }
             try
             {
+                var pogo = channel.Guild.GetTextChannel(211351526466125824);
+                await pogo.SendMessageAsync("`" + umsg.Author.Username + "` **BANNED USER** " + $"`{user.Username}`:\n```ruby\n" + $"ID: {user.Id}\n" + $"Reason: {msg}\n" + "Timestamp: " + prettyCurrentTime + "```").ConfigureAwait(false);
                 await (await user.CreateDMChannelAsync()).SendMessageAsync($"**You have been BANNED from `{channel.Guild.Name}` server.**\n" +
                                         $"Reason: {msg}").ConfigureAwait(false);
                 await Task.Delay(2000).ConfigureAwait(false);
@@ -305,6 +330,9 @@ namespace NadekoBot.Modules.Administration
             {
                 await channel.Guild.AddBanAsync(user, 7).ConfigureAwait(false);
 
+                string[] kicks = new string[] { "/root/kick.gif", "/root/kick1.gif", "/root/kick2.gif", "/root/kick3.gif", "/root/kick4.gif", "/root/kick5.gif", "/root/kick6.gif" };
+                Random rnd = new Random();
+                await channel.SendFileAsync(kicks[rnd.Next(kicks.Length)]).ConfigureAwait(false);
                 await channel.SendMessageAsync("Banned user " + user.Username + " Id: " + user.Id).ConfigureAwait(false);
             }
             catch
@@ -316,21 +344,22 @@ namespace NadekoBot.Modules.Administration
         [NadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         [RequirePermission(GuildPermission.KickMembers)]
-        [RequirePermission(GuildPermission.ManageMessages)]
+		[RequirePermission(GuildPermission.ManageMessages)]
         public async Task Softban(IUserMessage umsg, IGuildUser user, [Remainder] string msg = null)
         {
             var channel = (ITextChannel)umsg.Channel;
             if (string.IsNullOrWhiteSpace(msg))
             {
-                msg = "No reason provided.";
+                msg = "See #rules";
             }
-            if (umsg.Author.Id != user.Guild.OwnerId && user.Roles.Select(r => r.Position).Max() >= ((IGuildUser)umsg.Author).Roles.Select(r => r.Position).Max())
+            if (msg.ToString().ToLower() == "bot")
             {
-                await channel.SendMessageAsync("You can't use this command on users with a role higher or equal to yours in the role hierarchy.");
-                return;
+                msg = "See #rules, bot discussion is prohibited.";
             }
             try
             {
+                var pogo = channel.Guild.GetTextChannel(211351526466125824);
+                await pogo.SendMessageAsync("`" + umsg.Author.Username + "` **SOFT-BANNED USER** " + $"`{user.Username}`:\n```ruby\n" + $"ID: {user.Id}\n" + $"Reason: {msg}\n" + "Timestamp: " + prettyCurrentTime + "```").ConfigureAwait(false);
                 await user.SendMessageAsync($"**You have been SOFT-BANNED from `{channel.Guild.Name}` server.**\n" +
               $"Reason: {msg}").ConfigureAwait(false);
                 await Task.Delay(2000).ConfigureAwait(false);
@@ -342,6 +371,9 @@ namespace NadekoBot.Modules.Administration
                 try { await channel.Guild.RemoveBanAsync(user).ConfigureAwait(false); }
                 catch { await channel.Guild.RemoveBanAsync(user).ConfigureAwait(false); }
 
+                string[] kicks = new string[] { "/root/kick.gif", "/root/kick1.gif", "/root/kick2.gif", "/root/kick3.gif", "/root/kick4.gif", "/root/kick5.gif", "/root/kick6.gif" };
+                Random rnd = new Random();
+                await channel.SendFileAsync(kicks[rnd.Next(kicks.Length)]).ConfigureAwait(false);
                 await channel.SendMessageAsync("Soft-Banned user " + user.Username + " Id: " + user.Id).ConfigureAwait(false);
             }
             catch
@@ -356,6 +388,14 @@ namespace NadekoBot.Modules.Administration
         public async Task Kick(IUserMessage umsg, IGuildUser user, [Remainder] string msg = null)
         {
             var channel = (ITextChannel)umsg.Channel;
+            if (string.IsNullOrWhiteSpace(msg))
+            {
+                msg = "See #rules";
+            }
+            if (msg.ToString().ToLower() == "bot")
+            {
+                msg = "See #rules, bot discussion is prohibited.";
+            }
 
             if (user == null)
             {
@@ -372,6 +412,8 @@ namespace NadekoBot.Modules.Administration
             {
                 try
                 {
+                    var pogo = channel.Guild.GetTextChannel(211351526466125824);
+                    await pogo.SendMessageAsync("`" + umsg.Author.Username + "` **KICKED** USER " + $"`{user.Username}`:\n```ruby\n" + $"ID: {user.Id}\n" + $"Reason: {msg}\n" + "Timestamp: " + prettyCurrentTime + "```").ConfigureAwait(false);
                     await user.SendMessageAsync($"**You have been KICKED from `{channel.Guild.Name}` server.**\n" +
                                     $"Reason: {msg}").ConfigureAwait(false);
                     await Task.Delay(2000).ConfigureAwait(false);
@@ -380,7 +422,10 @@ namespace NadekoBot.Modules.Administration
             }
             try
             {
+                string[] kicks = new string[] { "/root/kick.gif", "/root/kick1.gif", "/root/kick2.gif", "/root/kick3.gif", "/root/kick4.gif", "/root/kick5.gif", "/root/kick6.gif" };
+                Random rnd = new Random();
                 await user.KickAsync().ConfigureAwait(false);
+                await channel.SendFileAsync(kicks[rnd.Next(kicks.Length)]).ConfigureAwait(false);
                 await channel.SendMessageAsync("Kicked user " + user.Username + " Id: " + user.Id).ConfigureAwait(false);
             }
             catch
@@ -391,7 +436,6 @@ namespace NadekoBot.Modules.Administration
 
         [NadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
-        [RequirePermission(GuildPermission.ManageRoles)]
         [Priority(1)]
         public async Task SetMuteRole(IUserMessage imsg, [Remainder] string name)
         {
@@ -412,7 +456,7 @@ namespace NadekoBot.Modules.Administration
 
         [NadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
-        [RequirePermission(GuildPermission.ManageRoles)]
+		[RequirePermission(GuildPermission.ManageRoles)]
         [Priority(0)]
         public Task SetMuteRole(IUserMessage imsg, [Remainder] IRole role)
             => SetMuteRole(imsg, role.Name);
@@ -421,15 +465,55 @@ namespace NadekoBot.Modules.Administration
         [RequireContext(ContextType.Guild)]
         [RequirePermission(GuildPermission.ManageRoles)]
         [RequirePermission(GuildPermission.MuteMembers)]
-        public async Task Mute(IUserMessage umsg, IGuildUser user)
+        public async Task Mute(IUserMessage umsg, IGuildUser user, [Remainder] string msg = null)
         {
             var channel = (ITextChannel)umsg.Channel;
 
+            if (string.IsNullOrWhiteSpace(msg))
+            {
+                msg = "`" +user.Username+ "` has been banished by `Lord " +umsg.Author.Username+ "` from Asgard.";
+            }
+
+            if (user == null)
+            {
+                await channel.SendMessageAsync("User not found.").ConfigureAwait(false);
+                return;
+            }
+			
             try
             {
+                // Serialize the list to a file
+                string path = @"/root/muted.dat";
+                if (!File.Exists(path))
+                {
+                    // Create a file to write to.
+                    using (StreamWriter sw = File.CreateText(path))
+                    {
+                        sw.WriteLine(user.Id.ToString());
+                    }
+                }
+                // This text is always added, making the file longer over time
+                // if it is not deleted.
+                using (StreamWriter sw = File.AppendText(path))
+                {
+                    sw.WriteLine(user.Id.ToString());
+                }
+				
+				if (!string.IsNullOrWhiteSpace(msg))
+				{
+					var pogo = channel.Guild.GetTextChannel(211351526466125824);
+					await pogo.SendMessageAsync("`" + umsg.Author.Username + "` **MUTED** USER " + $"`{user.Username}`:\n```ruby\n" + $"ID: {user.Id}\n" + $"Reason: {msg}\n" + "Timestamp: " + prettyCurrentTime + "```").ConfigureAwait(false);
+					await user.SendMessageAsync($"**You have been **MUTED** from `{channel.Guild.Name}` server.**\n" +
+				  $"Reason: {msg}").ConfigureAwait(false);
+					await Task.Delay(2000).ConfigureAwait(false);
+				}
+				
+                string[] kicks = new string[] { "/root/mute.gif", "/root/mute1.gif", "/root/mute2.gif", "/root/mute3.gif", "/root/mute4.gif", "/root/mute5.gif", "/root/mute6.gif" };
+                Random rnd = new Random();
+                await channel.SendFileAsync(kicks[rnd.Next(kicks.Length)]).ConfigureAwait(false);
                 await user.ModifyAsync(usr => usr.Mute = true).ConfigureAwait(false);
                 await user.AddRolesAsync(await GetMuteRole(channel.Guild).ConfigureAwait(false)).ConfigureAwait(false);
-                await channel.SendMessageAsync($"**{user}** was muted from text and voice chat successfully.").ConfigureAwait(false);
+                await channel.SendMessageAsync($"**{user}** has been put on the :cop: `Wall of Shame` :cop: .").ConfigureAwait(false);
             }
             catch
             {
@@ -441,12 +525,45 @@ namespace NadekoBot.Modules.Administration
         [RequireContext(ContextType.Guild)]
         [RequirePermission(GuildPermission.ManageRoles)]
         [RequirePermission(GuildPermission.MuteMembers)]
-        public async Task Unmute(IUserMessage umsg, IGuildUser user)
+        public async Task Unmute(IUserMessage umsg, IGuildUser user, [Remainder] string msg = null)
         {
             var channel = (ITextChannel)umsg.Channel;
+			
+            if (string.IsNullOrWhiteSpace(msg))
+            {
+                msg = "You earned the right to be back among the Asgardians.";
+            }
+
+            if (user == null)
+            {
+                await channel.SendMessageAsync("User not found.").ConfigureAwait(false);
+                return;
+            }
 
             try
             {
+				if (!string.IsNullOrWhiteSpace(msg))
+				{
+					var pogo = channel.Guild.GetTextChannel(211351526466125824);
+					await pogo.SendMessageAsync("`" + umsg.Author.Username + "` **UNMUTED** USER " + $"`{user.Username}`:\n```ruby\n" + $"ID: {user.Id}\n" + $"Reason: {msg}\n" + "Timestamp: " + prettyCurrentTime + "```").ConfigureAwait(false);
+					await user.SendMessageAsync($"**You have been **UNMUTED** from `{channel.Guild.Name}` server.**\n" +
+				  $"Reason: {msg}").ConfigureAwait(false);
+					await Task.Delay(2000).ConfigureAwait(false);
+				}
+                var path = @"/root/muted.dat";
+                string line_to_delete = user.Id.ToString();
+                string[] lines = File.ReadAllLines(path);
+                var results = lines.ToList();
+                for (int i = 0; i < lines.Length;i++)
+                {
+                    if (lines[i].Equals(user.Id.ToString()))
+                    {
+                        results.RemoveAt(i);
+                    }
+                }
+                lines = results.ToArray();
+                if (File.Exists(path)) { File.Delete(path); }
+                File.WriteAllLines("/root/muted.dat", lines);
                 await user.ModifyAsync(usr => usr.Mute = false).ConfigureAwait(false);
                 await user.RemoveRolesAsync(await GetMuteRole(channel.Guild).ConfigureAwait(false)).ConfigureAwait(false);
                 await channel.SendMessageAsync($"**{user}** was unmuted from text and voice chat successfully.").ConfigureAwait(false);
@@ -460,14 +577,41 @@ namespace NadekoBot.Modules.Administration
         [NadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         [RequirePermission(GuildPermission.ManageRoles)]
-        public async Task ChatMute(IUserMessage umsg, IGuildUser user)
+        public async Task ChatMute(IUserMessage umsg, IGuildUser user, [Remainder] string msg = null)
         {
             var channel = (ITextChannel)umsg.Channel;
+			
+            if (string.IsNullOrWhiteSpace(msg))
+            {
+                msg = "See #rules";
+            }
+            if (msg.ToString().ToLower() == "bot")
+            {
+                msg = "See #rules, bot discussion is prohibited.";
+            }
 
+            if (user == null)
+            {
+                await channel.SendMessageAsync("User not found.").ConfigureAwait(false);
+                return;
+            }
+			
             try
             {
+				if (!string.IsNullOrWhiteSpace(msg))
+				{
+					var pogo = channel.Guild.GetTextChannel(211351526466125824);
+					await pogo.SendMessageAsync("`" + umsg.Author.Username + "` MUTED USER " + $"`{user.Username}`:\n```ruby\n" + $"ID: {user.Id}\n" + $"Reason: {msg}\n" + "Timestamp: " + prettyCurrentTime + "```").ConfigureAwait(false);
+					await user.SendMessageAsync($"**You have been SOFT-BANNED from `{channel.Guild.Name}` server.**\n" +
+				  $"Reason: {msg}").ConfigureAwait(false);
+					await Task.Delay(2000).ConfigureAwait(false);
+				}
+				
+                string[] kicks = new string[] { "/root/kick.gif", "/root/kick1.gif", "/root/kick2.gif", "/root/kick3.gif", "/root/kick4.gif", "/root/kick5.gif", "/root/kick6.gif" };
+                Random rnd = new Random();
+                await channel.SendFileAsync(kicks[rnd.Next(kicks.Length)]).ConfigureAwait(false);
                 await user.AddRolesAsync(await GetMuteRole(channel.Guild).ConfigureAwait(false)).ConfigureAwait(false);
-                await channel.SendMessageAsync($"**{user}** was muted from chatting successfully.").ConfigureAwait(false);
+                await channel.SendMessageAsync($"**{user}** has been put on the :cop: `Wall of Shame` :cop: .").ConfigureAwait(false);
             }
             catch
             {
@@ -733,7 +877,7 @@ namespace NadekoBot.Modules.Administration
 
             game = game ?? "";
 
-            await NadekoBot.Client.SetGame(game).ConfigureAwait(false);
+            await NadekoBot.Client.GetCurrentUser().ModifyStatusAsync(u => u.Game = new Game(game)).ConfigureAwait(false);
 
             await channel.SendMessageAsync("`New game set.`").ConfigureAwait(false);
         }
@@ -747,7 +891,7 @@ namespace NadekoBot.Modules.Administration
 
             name = name ?? "";
 
-            await NadekoBot.Client.SetStream(name, url).ConfigureAwait(false);
+            await NadekoBot.Client.GetCurrentUser().ModifyStatusAsync(u => u.Game = new Game(name, url, StreamType.Twitch)).ConfigureAwait(false);
 
             await channel.SendMessageAsync("`New stream set.`").ConfigureAwait(false);
         }
@@ -842,7 +986,7 @@ namespace NadekoBot.Modules.Administration
             }
             var title = $"Chatlog-{channel.Guild.Name}/#{channel.Name}-{DateTime.Now}.txt";
             await (umsg.Author as IGuildUser).SendFileAsync(
-                await JsonConvert.SerializeObject(new { Messages = msgs.Select(s => $"【{s.Timestamp:HH:mm:ss}】{s.Author}:" + s.ToString()) }, Formatting.Indented).ToStream().ConfigureAwait(false),
+                await JsonConvert.SerializeObject(new { Messages = msgs.Select(s => $"{prettyCurrentTime}{s.Author}:" + s.ToString()) }, Formatting.Indented).ToStream().ConfigureAwait(false),
                 title, title).ConfigureAwait(false);
         }
 

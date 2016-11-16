@@ -14,6 +14,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace NadekoBot.Modules.Administration
 {
@@ -25,7 +26,7 @@ namespace NadekoBot.Modules.Administration
             private static ShardedDiscordClient _client { get; }
             private static Logger _log { get; }
 
-            private static string prettyCurrentTime => $"【{DateTime.Now:HH:mm:ss}】";
+            private static string prettyCurrentTime => $"{DateTime.Now.ToUniversalTime().ToString("yyyy-MM-dd 【HH:mm:ss】 UTC")}";
 
             public static ConcurrentDictionary<ulong, LogSetting> GuildLogSettings { get; }
 
@@ -340,7 +341,36 @@ namespace NadekoBot.Modules.Administration
 
                 var task = Task.Run(async () =>
                 {
-                    try { await logChannel.SendMessageAsync($"`{prettyCurrentTime}`❗`User joined:` **{usr.Username}** ({usr.Id})").ConfigureAwait(false); } catch (Exception ex) { _log.Warn(ex); }
+                    bool muted = false;
+                    try
+                    {
+                        // Serialize the list to a file
+                        string path = @"/root/muted.dat";
+                        // Open the file to read from.
+                        using (StreamReader sr = File.OpenText(path))
+                        {
+                            string s = "";
+                            while ((s = sr.ReadLine()) != null)
+                            {
+                                if(usr.Id == Convert.ToUInt64(s))
+                                {
+                                    await usr.AddRolesAsync(await GetMuteRole(usr.Guild).ConfigureAwait(false)).ConfigureAwait(false);
+                                    muted = true;
+                                    break;
+                                } else
+                                {
+                                    muted = false;
+                                }
+                            }
+                        }
+                    } catch { }
+                    if (muted)
+                    {
+                        try { await logChannel.SendMessageAsync($"`{prettyCurrentTime}`❗`[MUTED] User joined:` **{usr.Username}** ({usr.Id})").ConfigureAwait(false); } catch (Exception ex) { _log.Warn(ex); }
+                    } else
+                    {
+                        try { await logChannel.SendMessageAsync($"`{prettyCurrentTime}`❗`User joined:` **{usr.Username}** ({usr.Id})").ConfigureAwait(false); } catch (Exception ex) { _log.Warn(ex); }
+                    }
                 });
 
                 return Task.CompletedTask;

@@ -27,23 +27,19 @@ namespace NadekoBot.Modules.Administration
                 {
                     var t = Task.Run(async () =>
                     {
-                        try
+                        GuildConfig conf;
+                        using (var uow = DbHandler.UnitOfWork())
                         {
-                            GuildConfig conf;
-                            using (var uow = DbHandler.UnitOfWork())
-                            {
-                                conf = uow.GuildConfigs.For(user.Guild.Id);
-                            }
-
-                            if (conf.AutoAssignRoleId == 0)
-                                return;
-
-                            var role = user.Guild.Roles.FirstOrDefault(r => r.Id == conf.AutoAssignRoleId);
-
-                            if (role != null)
-                                await user.AddRolesAsync(role);
+                            conf = uow.GuildConfigs.For(user.Guild.Id);
                         }
-                        catch (Exception ex) { _log.Warn(ex); }
+
+                        if (conf.AutoAssignRoleId == 0)
+                            return;
+
+                        var role = user.Guild.Roles.FirstOrDefault(r => r.Id == conf.AutoAssignRoleId);
+
+                        if (role != null)
+                            try { await user.AddRolesAsync(role); } catch (Exception ex) { _log.Warn(ex); }
                     });
                     return Task.CompletedTask;
                 };

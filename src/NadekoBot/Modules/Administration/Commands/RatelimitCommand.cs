@@ -5,6 +5,7 @@ using NadekoBot.Attributes;
 using NadekoBot.Extensions;
 using NLog;
 using System;
+using System.Collections.Generic;
 using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
@@ -72,10 +73,33 @@ namespace NadekoBot.Modules.Administration
                     var t = Task.Run(async () =>
                     {
                         var usrMsg = umsg as IUserMessage;
+                        var usrGuild = umsg as IGuildUser;
                         var channel = usrMsg.Channel as ITextChannel;
-
-                        if (channel == null || usrMsg.IsAuthor())
+                        var usr = channel.GetUser(umsg.Author.Id) as IUser;
+                        ulong[] white = new ulong[] { 
+                            208441726464032769, // administrators
+                            240045137810554880, // moderators
+                            240049119035523073, // devs
+                            240049515770413057, // moderators I18n
+                            240049523370622976 // helpers
+                        };
+                        var roles = usrGuild.Roles;
+                        if (channel == null || usrMsg.IsAuthor() || usrMsg.Author.Id == channel.Guild.OwnerId)
                             return;
+                        for (int i = 0; i <= roles.Count; i++)
+                        {
+                            for (int x = 0; x <= white.Length; x++) {
+                               var usrGuild_Roles = channel.Guild.GetRole(white[x]);
+                               var usrGuild_Roles_Members = usrGuild_Roles.Members();
+                                foreach (IUser user_roles in usrGuild_Roles_Members)
+                                {
+                                    if (usr == user_roles)
+                                    {
+                                        return;
+                                    }
+                                }
+                            }
+                        }
                         Ratelimiter limiter;
                         if (!RatelimitingChannels.TryGetValue(channel.Id, out limiter))
                             return;

@@ -19,7 +19,7 @@ namespace NadekoBot.Modules.Administration
         [Group]
         public class SelfAssignedRolesCommands
         {
-            
+
             [NadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             [RequirePermission(GuildPermission.ManageMessages)]
@@ -187,7 +187,7 @@ namespace NadekoBot.Modules.Administration
                 {
                     await channel.SendMessageAsync($":anger:`I am unable to add that role to you. I can't add roles to owners or other roles higher than my role in the role hierarchy.`").ConfigureAwait(false);
                     Console.WriteLine(ex);
-                    return;
+					return;
                 }
                 var msg = await channel.SendMessageAsync($":ok:You now have {role.Name} role.").ConfigureAwait(false);
 
@@ -231,10 +231,11 @@ namespace NadekoBot.Modules.Administration
                 {
                     await guildUser.RemoveRolesAsync(role).ConfigureAwait(false);
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
                     await channel.SendMessageAsync($":anger:`I am unable to add that role to you. I can't remove roles to owners or other roles higher than my role in the role hierarchy.`").ConfigureAwait(false);
-                    return;
+                    Console.WriteLine(ex);
+					return;
                 }
                 var msg = await channel.SendMessageAsync($":ok: You no longer have {role.Name} role.").ConfigureAwait(false);
 

@@ -9,7 +9,6 @@ using Discord.API;
 using Discord.Logging;
 using System.IO;
 using NLog;
-using NadekoBot.Extensions;
 
 namespace NadekoBot
 {
@@ -71,9 +70,6 @@ namespace NadekoBot
         public Task<ISelfUser> GetCurrentUserAsync() =>
             Clients[0].GetCurrentUserAsync();
 
-        public Task<ISelfUser[]> GetAllCurrentUsersAsync() =>
-            Task.WhenAll(Clients.Select(c => c.GetCurrentUserAsync()));
-
         public IReadOnlyCollection<IGuild> GetGuilds() =>
             Clients.SelectMany(c => c.GetGuilds()).ToArray();
 
@@ -91,18 +87,5 @@ namespace NadekoBot
 
         internal Task DownloadAllUsersAsync() =>
             Task.WhenAll(Clients.Select(async c => { await c.DownloadAllUsersAsync(); _log.Info($"Shard #{c.ShardId} downloaded {c.GetGuilds().Sum(g => g.GetUsers().Count)} users."); }));
-
-        public async Task SetGame(string game)
-        {
-            await Task.WhenAll((await GetAllCurrentUsersAsync())
-                                    .Select(u => u.ModifyStatusAsync(ms => ms.Game = new Discord.Game(game))));
-        }
-
-        public async Task SetStream(string name, string url)
-        {
-            await Task.WhenAll((await GetAllCurrentUsersAsync())
-                                    .Select(u => u.ModifyStatusAsync(ms => ms.Game = new Discord.Game(name, url, StreamType.Twitch))));
-                
-        }
     }
 }

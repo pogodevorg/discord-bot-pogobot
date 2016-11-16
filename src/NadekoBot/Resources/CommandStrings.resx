@@ -436,19 +436,10 @@
     <value>listcustreact lcr</value>
   </data>
   <data name="listcustreact_desc" xml:space="preserve">
-    <value>Lists global or server custom reactions (20 commands per page). Running the command in DM will list global custom reactions, while running it in server will list that server's custom reactions. Specifying `all` argument instead of the number will DM you a text file with a list of all custom reactions.</value>
+    <value>Lists global or server custom reactions (15 commands per page). Running the command in DM will list global custom reactions, while running it in server will list that server's custom reactions.</value>
   </data>
   <data name="listcustreact_usage" xml:space="preserve">
-    <value>`{0}lcr 1` or `{0}lcr all`</value>
-  </data>
-  <data name="listcustreactg_cmd" xml:space="preserve">
-    <value>listcustreactg lcrg</value>
-  </data>
-  <data name="listcustreactg_desc" xml:space="preserve">
-    <value>Lists global or server custom reactions (20 commands per page) grouped by trigger, and show a number of responses for each. Running the command in DM will list global custom reactions, while running it in server will list that server's custom reactions.</value>
-  </data>
-  <data name="listcustreactg_usage" xml:space="preserve">
-    <value>`{0}lcrg 1`</value>
+    <value>`{0}lcr 1`</value>
   </data>
   <data name="showcustreact_cmd" xml:space="preserve">
     <value>showcustreact scr</value>
@@ -592,7 +583,7 @@
     <value>Mutes a mentioned user both from speaking and chatting.</value>
   </data>
   <data name="mute_usage" xml:space="preserve">
-    <value>`{0}mute @Someone`</value>
+    <value>`{0}mute @Someone reason`</value>
   </data>
   <data name="voiceunmute_cmd" xml:space="preserve">
     <value>voiceunmute</value>
@@ -2455,7 +2446,7 @@
     <value>Prevents a mentioned user from chatting in text channels.</value>
   </data>
   <data name="chatmute_usage" xml:space="preserve">
-    <value>`{0}chatmute @Someone`</value>
+    <value>`{0}chatmute @Someone reason`</value>
   </data>
   <data name="voicemute_cmd" xml:space="preserve">
     <value>voicemute</value>
@@ -2623,7 +2614,7 @@
     <value>hentaibomb</value>
   </data>
   <data name="hentaibomb_desc" xml:space="preserve">
-    <value>Shows a total 5 images (from gelbooru, danbooru, konachan, yandere and atfbooru). Tag is optional but preferred.</value>
+    <value>Shows a total 4 images (from gelbooru, danbooru, konachan and atfbooru). Tag is optional but preferred.</value>
   </data>
   <data name="hentaibomb_usage" xml:space="preserve">
     <value>`{0}hentaibomb yuri`</value>
@@ -2690,6 +2681,15 @@
   </data>
   <data name="bfu_usage" xml:space="preserve">
     <value>`{0}bfu platform game user`</value>
+  </data>
+  <data name="safeyandere_cmd" xml:space="preserve">
+    <value>safeyandere sy</value>
+  </data>
+  <data name="safeyandere_desc" xml:space="preserve">
+    <value>Shows a random image from yandere with a given tag. Tag is optional but preferred. (multiple tags are appended with +)</value>
+  </data>
+  <data name="safeyandere_usage" xml:space="preserve">
+    <value>`{0}sy tag1+tag2` or `{0}safeyandere tag1+tag2`</value>
   </data>
   <data name="yandere_cmd" xml:space="preserve">
     <value>yandere</value>

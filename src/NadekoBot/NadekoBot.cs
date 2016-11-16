@@ -38,29 +38,29 @@ namespace NadekoBot
 
         public static ConcurrentDictionary<string, string> ModulePrefixes { get; private set; }
         public static bool Ready { get; private set; }
-
+		
         public static IEnumerable<GuildConfig> AllGuildConfigs { get; }
+ 
+         static NadekoBot()
+         {
+             using (var uow = DbHandler.UnitOfWork())
+             {
+                 AllGuildConfigs = uow.GuildConfigs.GetAll();
+             }
+         }
 
-        static NadekoBot()
-        {
-            using (var uow = DbHandler.UnitOfWork())
-            {
-                AllGuildConfigs = uow.GuildConfigs.GetAll();
-            }
-        }
-
-        public async Task RunAsync(params string[] args)
+        public async Task RunAsync(string[] args)
         {
             SetupLogger();
             _log = LogManager.GetCurrentClassLogger();
 
             _log.Info("Starting NadekoBot v" + StatsService.BotVersion);
-
+			
 
             Credentials = new BotCredentials();
 
             //create client
-            Client = new ShardedDiscordClient(new DiscordSocketConfig
+            Client = new ShardedDiscordClient (new DiscordSocketConfig
             {
                 AudioMode = Discord.Audio.AudioMode.Outgoing,
                 MessageCacheSize = 10,
@@ -79,7 +79,7 @@ namespace NadekoBot
             //setup DI
             var depMap = new DependencyMap();
             depMap.Add<ILocalization>(Localizer);
-            depMap.Add<ShardedDiscordClient>(Client);
+            depMap.Add<ShardedDiscordClient >(Client);
             depMap.Add<CommandService>(CommandService);
             depMap.Add<IGoogleApiService>(Google);
 
@@ -111,12 +111,8 @@ namespace NadekoBot
 #endif
             Ready = true;
             Console.WriteLine(await Stats.Print().ConfigureAwait(false));
-        }
 
-        public async Task RunAndBlockAsync(params string[] args)
-        {
-            await RunAsync(args).ConfigureAwait(false);
-            await Task.Delay(-1).ConfigureAwait(false);
+            await Task.Delay(-1);
         }
 
         private void SetupLogger()

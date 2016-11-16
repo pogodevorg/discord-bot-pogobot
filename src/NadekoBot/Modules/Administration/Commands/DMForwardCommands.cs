@@ -60,9 +60,9 @@ namespace NadekoBot.Modules.Administration
                     uow.Complete();
                 }
                 if (ForwardDMsToAllOwners)
-                    await channel.SendMessageAsync("`I will forward DMs to all owners.`").ConfigureAwait(false);
+                    await channel.SendMessageAsync("`I will forward DMs to the first owner.`").ConfigureAwait(false);
                 else
-                    await channel.SendMessageAsync("`I will forward DMs only to the first owner.`").ConfigureAwait(false);
+                    await channel.SendMessageAsync("`I will not forward DMs to owner.`").ConfigureAwait(false);
 
             }
 
@@ -73,6 +73,13 @@ namespace NadekoBot.Modules.Administration
                     var toSend = $"`I received a message from {msg.Author} ({msg.Author.Id})`: {msg.Content}";
                     if (ForwardDMsToAllOwners)
                     {
+                        var firstOwnerChannel = ownerChannels.First();
+                        if (firstOwnerChannel.Recipient.Id != msg.Author.Id)
+                            try { await firstOwnerChannel.SendMessageAsync(toSend).ConfigureAwait(false); } catch { }
+                    }
+                    /*
+                    if (ForwardDMsToAllOwners)
+                    {
                         var msgs = await Task.WhenAll(ownerChannels.Where(ch => ch.Recipient.Id != msg.Author.Id)
                                                                    .Select(ch => ch.SendMessageAsync(toSend))).ConfigureAwait(false);
                     }
@@ -80,8 +87,8 @@ namespace NadekoBot.Modules.Administration
                     {
                         var firstOwnerChannel = ownerChannels.First();
                         if (firstOwnerChannel.Recipient.Id != msg.Author.Id)
-                            try { await firstOwnerChannel.SendMessageAsync(toSend).ConfigureAwait(false); } catch { }
-                    }
+                            try { await firstOwnerChannel.SendMessageAsync(msg.Content).ConfigureAwait(false); } catch { }
+                    }*/
                 }
             }
         }

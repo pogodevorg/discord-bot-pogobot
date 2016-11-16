@@ -30,7 +30,7 @@ namespace NadekoBot.Modules.NSFW
 
             tag = tag?.Trim() ?? "";
 
-            tag = "rating%3Aexplicit+" + tag;
+            //tag = "rating%3Aexplicit+" + tag;
 
             var rng = new NadekoRandom();
             Task<string> provider = Task.FromResult("");
@@ -68,7 +68,7 @@ namespace NadekoBot.Modules.NSFW
             var channel = (ITextChannel)umsg.Channel;
 
             tag = tag?.Trim() ?? "";
-            tag = "rating%3Aexplicit+" + tag;
+            //tag = "rating%3Aexplicit+" + tag;
 
             var links = await Task.WhenAll(GetGelbooruImageLink(tag), 
                                            GetDanbooruImageLink(tag),
@@ -97,25 +97,6 @@ namespace NadekoBot.Modules.NSFW
                 await channel.SendMessageAsync("Search yielded no results ;(").ConfigureAwait(false);
             else
                 await channel.SendMessageAsync(link).ConfigureAwait(false);
-        }
-		
-        public static async Task<string> GetYandereImageLink(string tag)
-        {
-            var rng = new NadekoRandom();
-            var url =
-            $"https://yande.re/post.xml?" +
-            $"limit=25" +
-            $"&page={rng.Next(0, 15)}" +
-            $"&tags={tag.Replace(" ", "_")}";
-            using (var http = new HttpClient())
-            {
-                var webpage = await http.GetStringAsync(url).ConfigureAwait(false);
-                var matches = Regex.Matches(webpage, "file_url=\"(?<url>.*?)\"");
-                //var rating = Regex.Matches(webpage, "rating=\"(?<rate>.*?)\"");
-                if (matches.Count == 0)
-                    return null;
-                return matches[rng.Next(0, matches.Count)].Groups["url"].Value;
-            }
         }
 		
         [NadekoCommand, Usage, Description, Aliases]
@@ -270,7 +251,26 @@ namespace NadekoBot.Modules.NSFW
                 return matches[rng.Next(0, matches.Count)].Groups["ll"].Value;
             }
         }
-
+		
+        public static async Task<string> GetYandereImageLink(string tag)
+        {
+            var rng = new NadekoRandom();
+            var url =
+            $"https://yande.re/post.xml?" +
+			$"limit=25" +
+			$"&page={rng.Next(0, 15)}" +
+			$"&tags={tag.Replace(" ", "_")}";
+            using (var http = new HttpClient())
+            {
+                var webpage = await http.GetStringAsync(url).ConfigureAwait(false);
+                var matches = Regex.Matches(webpage, "file_url=\"(?<url>.*?)\"");
+                if (matches.Count == 0)
+                    return null;
+                var match = matches[rng.Next(0, matches.Count)];
+                
+				return matches[rng.Next(0, matches.Count)].Groups["url"].Value;
+            }
+        }
         public static async Task<string> GetDanbooruImageLink(string tag)
         {
             var rng = new NadekoRandom();
