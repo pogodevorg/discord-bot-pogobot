@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
-using NadekoBot.Services.Database.Impl;
+using NadekoBot.Services.Database;
 
 namespace NadekoBot.Migrations
 {
