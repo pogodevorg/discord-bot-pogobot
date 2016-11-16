@@ -32,6 +32,8 @@ deploy:
   provider: releases
   api_key: "a60d2b21fbb1a9a4759ca4676ecc8add868894b8"
   file: "~/Release.tar.gz"
+  overwrite: true
   skip_cleanup: true
   on:
     tags: true
+    all_branches: true
