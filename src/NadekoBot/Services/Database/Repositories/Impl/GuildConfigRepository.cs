@@ -121,15 +121,5 @@ namespace NadekoBot.Services.Database.Repositories.Impl
             data.RootPermission = p;
             return data;
         }
-
-        public void SetCleverbotEnabled(ulong id, bool cleverbotEnabled)
-        {
-            var conf = _set.FirstOrDefault(gc => gc.GuildId == id);
-
-            if (conf == null)
-                return;
-
-            conf.CleverbotEnabled = cleverbotEnabled;
-        }
     }
 }

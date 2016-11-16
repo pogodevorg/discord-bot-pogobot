@@ -102,42 +102,19 @@ namespace NadekoBot.Modules.Music.Classes
             {
                 var attempt = 0;             
 
-                var prebufferingTask = CheckPrebufferingAsync(inStream, cancelToken, 1.MiB()); //Fast connection can do this easy
-                var finished = false;
-                var count = 0;
+                var prebufferingTask = CheckPrebufferingAsync(inStream, cancelToken);
                 var sw = new Stopwatch();
-                var slowconnection = false;
                 sw.Start();
-                while (!finished)
+                var t = await Task.WhenAny(prebufferingTask, Task.Delay(5000, cancelToken));
+                if (t != prebufferingTask)
                 {
-                    var t = await Task.WhenAny(prebufferingTask, Task.Delay(2000, cancelToken));
-                    if (t != prebufferingTask)
-                    {
-                        count++;
-                        if (count == 10)
-                        {
-                            slowconnection = true;
-                            prebufferingTask = CheckPrebufferingAsync(inStream, cancelToken, 20.MiB());
-                            _log.Warn("Slow connection buffering more to ensure no disruption, consider hosting in cloud");
-                            continue;
-                        }
-                        
-                        if (inStream.BufferingCompleted && count == 1)
-                        {
-                            _log.Debug("Prebuffering canceled. Cannot get any data from the stream.");
-                            return;
-                        }
-                        else
-                        {
-                            continue;
-                        }
-                     }
-                    else if (prebufferingTask.IsCanceled)
-                    {
-                        _log.Debug("Prebuffering canceled. Cannot get any data from the stream.");
-                        return;
-                    }
-                    finished = true;
+                    _log.Debug("Prebuffering timed out or canceled. Cannot get any data from the stream.");
+                    return;
+                }
+                else if(prebufferingTask.IsCanceled)
+                {
+                    _log.Debug("Prebuffering timed out. Cannot get any data from the stream.");
+                    return;
                 }
                 sw.Stop();
                 _log.Debug("Prebuffering successfully completed in "+ sw.Elapsed);
@@ -169,13 +146,8 @@ namespace NadekoBot.Modules.Music.Classes
                                 MusicPlayer.SongCancelSource.Cancel();
                                 break;
                             }
-                            if (slowconnection)
-                            {
-                                _log.Warn("Slow connection has disrupted music, waiting a bit for buffer");
-                                await Task.Delay(1000, cancelToken).ConfigureAwait(false);
-                            }
                             else
-                                await Task.Delay(100, cancelToken).ConfigureAwait(false);
+                                await Task.Delay(100, cancelToken).ConfigureAwait(false);                         
                         }
                         else
                             attempt = 0;
@@ -204,9 +176,9 @@ namespace NadekoBot.Modules.Music.Classes
             }
         }
 
-        private async Task CheckPrebufferingAsync(SongBuffer inStream, CancellationToken cancelToken, long size)
+        private async Task CheckPrebufferingAsync(SongBuffer inStream, CancellationToken cancelToken)
         {
-            while (!inStream.BufferingCompleted && inStream.Length < size)
+            while (!inStream.BufferingCompleted && inStream.Length < 10.MiB())
             {
                 await Task.Delay(100, cancelToken);
             }
@@ -334,10 +306,10 @@ namespace NadekoBot.Modules.Music.Classes
                 var link = (await NadekoBot.Google.GetVideosByKeywordsAsync(query).ConfigureAwait(false)).FirstOrDefault();
                 if (string.IsNullOrWhiteSpace(link))
                     throw new OperationCanceledException("Not a valid youtube query.");
-                var allVideos = await Task.Run(async () => { try { return await YouTube.Default.GetAllVideosAsync(link).ConfigureAwait(false); } catch { return Enumerable.Empty<YouTubeVideo>(); } }).ConfigureAwait(false);
+                var allVideos = await Task.Run(async () => await YouTube.Default.GetAllVideosAsync(link).ConfigureAwait(false)).ConfigureAwait(false);
                 var videos = allVideos.Where(v => v.AdaptiveKind == AdaptiveKind.Audio);
                 var video = videos
-                    .Where(v => v.AudioBitrate < 256)
+                    .Where(v => v.AudioBitrate < 192)
                     .OrderByDescending(v => v.AudioBitrate)
                     .FirstOrDefault();
 

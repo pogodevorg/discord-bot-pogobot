@@ -59,7 +59,6 @@ namespace NadekoBot.Services.Database.Models
         public HashSet<FilterChannelId> FilterWordsChannelIds { get; set; } = new HashSet<FilterChannelId>();
 
         public string MuteRoleName { get; set; }
-        public bool CleverbotEnabled { get; set; }
     }
 
     public class FilterChannelId :DbEntity
