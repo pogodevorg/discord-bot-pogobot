@@ -31,7 +31,7 @@ script:
   - cd ./bin && tar -czvf ~/Release.tar.gz ./Release
 deploy:
   provider: releases
-  api_key: "95d6542eed119f4485e5258b23ba200cb2c6eb6e"
+  api_key: "oauth key have to encrypt later"
   file: "~/Release.tar.gz"
   skip_cleanup: true
   on:
