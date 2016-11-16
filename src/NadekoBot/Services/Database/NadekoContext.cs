@@ -9,7 +9,7 @@ using NadekoBot.Extensions;
 
 namespace NadekoBot.Services.Database
 {
-    public abstract class NadekoContext : DbContext
+    public class NadekoContext : DbContext
     {
         public DbSet<Quote> Quotes { get; set; }
         public DbSet<Donator> Donators { get; set; }
@@ -39,7 +39,12 @@ namespace NadekoBot.Services.Database
         public NadekoContext()
         {
            this.Database.Migrate();
-           EnsureSeedData();
+        }
+
+        public NadekoContext(DbContextOptions options) : base(options)
+        {
+          this.Database.Migrate();
+          EnsureSeedData();
         }
 
         public void EnsureSeedData()
@@ -112,11 +117,11 @@ namespace NadekoBot.Services.Database
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             #region QUOTES
-            
+
             var quoteEntity = modelBuilder.Entity<Quote>();
 
             #endregion
-            
+
             #region Donators
 
             var donatorEntity = modelBuilder.Entity<Donator>();
@@ -141,7 +146,7 @@ namespace NadekoBot.Services.Database
             //    .HasMany(c => c.ModulePrefixes)
             //    .WithOne(mp => mp.BotConfig)
             //    .HasForeignKey(mp => mp.BotConfigId);
-                
+
             #endregion
 
             #region ClashOfClans
@@ -210,7 +215,7 @@ namespace NadekoBot.Services.Database
                 .HasMany(p => p.Songs)
                 .WithOne()
                 .OnDelete(Microsoft.EntityFrameworkCore.Metadata.DeleteBehavior.Cascade);
-                
+
 
             #endregion
         }
