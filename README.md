@@ -17,12 +17,13 @@
 `discord-bot-pogobot` is an open source repo for managing Discord Servers.
 
 ## Installation
-### Windows
+### Linux
 1. `git clone https://github.com/pogodevorg/discord-bot-pogobot.git`
-2. `git submodule init`
-3. `git submodule update`
-4. `Download .zip and replace discord-bot-pogobot with this repos`
-5. `Compile & Configure & Run`
+2. `git submodule update --init --recursive`
+3. `Install [netcore](https://www.microsoft.com/net/core#linuxubuntu)`
+4. `dotnet restore`
+5. `Configure credentials.json`
+6. `dotnet run -c Release`
 
 ## Documentation
 1. [Commands List](https://github.com/pogodevorg/discord-bot-pogobot/blob/master/docs/Command%20List.md)
@@ -43,8 +44,6 @@ Currently, you can contribute to this project by:
 ### Core Maintainers
 
 * [![Build Status](https://github.com/fkndean.png?size=36) - fkndean](https://github.com/fkndean)
-
-* [![Build Status](https://github.com/Lisiano256.png?size=36) - Lisiano256](https://github.com/Lisiano256)
 
 ## Credits
 
