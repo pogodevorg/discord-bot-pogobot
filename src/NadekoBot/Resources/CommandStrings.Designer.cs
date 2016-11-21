@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace NadekoBot.Modules.Searches.Commands {
+namespace NadekoBot.Resources {
     using System;
     using System.Reflection;
     
@@ -38,7 +38,7 @@ namespace NadekoBot.Modules.Searches.Commands {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("NadekoBot.Modules.Searches.Commands.CommandStrings", typeof(CommandStrings).GetTypeInfo().Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("NadekoBot.Resources.CommandStrings", typeof(CommandStrings).GetTypeInfo().Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -5539,7 +5539,7 @@ namespace NadekoBot.Modules.Searches.Commands {
                 return ResourceManager.GetString("revimg_usage", resourceCulture);
             }
         }
-        
+		
         /// <summary>
         ///    Looks up a localized string similar to randomgalleryimgur rgi.
         /// </summary>
