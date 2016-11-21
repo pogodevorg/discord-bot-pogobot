@@ -436,10 +436,19 @@
     <value>listcustreact lcr</value>
   </data>
   <data name="listcustreact_desc" xml:space="preserve">
-    <value>Lists global or server custom reactions (15 commands per page). Running the command in DM will list global custom reactions, while running it in server will list that server's custom reactions.</value>
+    <value>Lists global or server custom reactions (20 commands per page). Running the command in DM will list global custom reactions, while running it in server will list that server's custom reactions. Specifying `all` argument instead of the number will DM you a text file with a list of all custom reactions.</value>
   </data>
   <data name="listcustreact_usage" xml:space="preserve">
-    <value>`{0}lcr 1`</value>
+    <value>`{0}lcr 1` or `{0}lcr all`</value>
+  </data>
+  <data name="listcustreactg_cmd" xml:space="preserve">
+    <value>listcustreactg lcrg</value>
+  </data>
+  <data name="listcustreactg_desc" xml:space="preserve">
+    <value>Lists global or server custom reactions (20 commands per page) grouped by trigger, and show a number of responses for each. Running the command in DM will list global custom reactions, while running it in server will list that server's custom reactions.</value>
+  </data>
+  <data name="listcustreactg_usage" xml:space="preserve">
+    <value>`{0}lcrg 1`</value>
   </data>
   <data name="showcustreact_cmd" xml:space="preserve">
     <value>showcustreact scr</value>
@@ -583,7 +592,7 @@
     <value>Mutes a mentioned user both from speaking and chatting.</value>
   </data>
   <data name="mute_usage" xml:space="preserve">
-    <value>`{0}mute @Someone reason`</value>
+    <value>`{0}mute @Someone`</value>
   </data>
   <data name="voiceunmute_cmd" xml:space="preserve">
     <value>voiceunmute</value>
@@ -2446,7 +2455,7 @@
     <value>Prevents a mentioned user from chatting in text channels.</value>
   </data>
   <data name="chatmute_usage" xml:space="preserve">
-    <value>`{0}chatmute @Someone reason`</value>
+    <value>`{0}chatmute @Someone`</value>
   </data>
   <data name="voicemute_cmd" xml:space="preserve">
     <value>voicemute</value>
@@ -2614,7 +2623,7 @@
     <value>hentaibomb</value>
   </data>
   <data name="hentaibomb_desc" xml:space="preserve">
-    <value>Shows a total 4 images (from gelbooru, danbooru, konachan and atfbooru). Tag is optional but preferred.</value>
+    <value>Shows a total 5 images (from gelbooru, danbooru, konachan, yandere and atfbooru). Tag is optional but preferred.</value>
   </data>
   <data name="hentaibomb_usage" xml:space="preserve">
     <value>`{0}hentaibomb yuri`</value>
@@ -2682,14 +2691,23 @@
   <data name="bfu_usage" xml:space="preserve">
     <value>`{0}bfu platform game user`</value>
   </data>
-  <data name="safeyandere_cmd" xml:space="preserve">
-    <value>safeyandere sy</value>
+  <data name="imgur_cmd" xml:space="preserve">
+    <value>imgur</value>
   </data>
-  <data name="safeyandere_desc" xml:space="preserve">
-    <value>Shows a random image from yandere with a given tag. Tag is optional but preferred. (multiple tags are appended with +)</value>
+  <data name="imgur_desc" xml:space="preserve">
+    <value>Searches for a top imgur image, followed by a query.</value>
   </data>
-  <data name="safeyandere_usage" xml:space="preserve">
-    <value>`{0}sy tag1+tag2` or `{0}safeyandere tag1+tag2`</value>
+  <data name="imgur_usage" xml:space="preserve">
+    <value>`{0}imgur pikachu`</value>
+  </data>
+  <data name="ri_cmd" xml:space="preserve">
+    <value>randomimgur ri</value>
+  </data>
+  <data name="ri_desc" xml:space="preserve">
+    <value>Shows a random imgur image.</value>
+  </data>
+  <data name="ri_usage" xml:space="preserve">
+    <value>`{0}randomimgur` or `{0}ri`</value>
   </data>
   <data name="yandere_cmd" xml:space="preserve">
     <value>yandere</value>
@@ -2699,5 +2717,32 @@
   </data>
   <data name="yandere_usage" xml:space="preserve">
     <value>`{0}yandere tag1+tag2`</value>
+  </data>
+  <data name="wowstatus_cmd" xml:space="preserve">
+    <value>wowstatus wst</value>
+  </data>
+  <data name="wowstatus_desc" xml:space="preserve">
+    <value>Checks the status of a specific region's WoW realms (e.g., us, eu, kr, tw, cn, sea), followed by a realm number.</value>
+  </data>
+  <data name="wowstatus_usage" xml:space="preserve">
+    <value>`{0}wowstatus us 2` or `{0}wst us 2`</value>
+  </data>
+  <data name="wowchar_cmd" xml:space="preserve">
+    <value>wowchar wch</value>
+  </data>
+  <data name="wowchar_desc" xml:space="preserve">
+    <value>Shows information about a player which takes region, realm name, followed by a character name.</value>
+  </data>
+  <data name="wowchar_usage" xml:space="preserve">
+    <value>`{0}wowchar us medivh lisiano` or `{0}wch us medivh lisiano`</value>
+  </data>
+  <data name="rgi_cmd" xml:space="preserve">
+    <value>randomgalleryimgur rgi</value>
+  </data>
+  <data name="rgi_desc" xml:space="preserve">
+    <value>Looks for the top and viral images which takes arguments page number, followed by a date range (day | week | month | year | all)</value>
+  </data>
+  <data name="rgi_usage" xml:space="preserve">
+    <value>`{0}randomgalleryimgur 1 day` or `{0}rgi 1 day`</value>
   </data>
 </root>

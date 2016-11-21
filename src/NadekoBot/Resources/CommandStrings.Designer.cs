@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace NadekoBot.Resources {
+namespace NadekoBot.Modules.Searches.Commands {
     using System;
     using System.Reflection;
     
@@ -38,7 +38,7 @@ namespace NadekoBot.Resources {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("NadekoBot.Resources.CommandStrings", typeof(CommandStrings).GetTypeInfo().Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("NadekoBot.Modules.Searches.Commands.CommandStrings", typeof(CommandStrings).GetTypeInfo().Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -2931,7 +2931,7 @@ namespace NadekoBot.Resources {
         }
         
         /// <summary>
-        ///    Looks up a localized string similar to Shows a hentai image from a random website (gelbooru or danbooru or konachan or atfbooru) with a given tag. Tag is optional but preferred. Only 1 tag allowed..
+        ///    Looks up a localized string similar to Shows a hentai image from a random website (gelbooru or danbooru or konachan or atfbooru or yandere) with a given tag. Tag is optional but preferred. Only 1 tag allowed..
         /// </summary>
         public static string hentai_desc {
             get {
@@ -2958,7 +2958,7 @@ namespace NadekoBot.Resources {
         }
         
         /// <summary>
-        ///    Looks up a localized string similar to Shows a total 4 images (from gelbooru, danbooru, konachan and atfbooru). Tag is optional but preferred..
+        ///    Looks up a localized string similar to Shows a total 5 images (from gelbooru, danbooru, konachan, yandere and atfbooru). Tag is optional but preferred..
         /// </summary>
         public static string hentaibomb_desc {
             get {
@@ -3134,6 +3134,33 @@ namespace NadekoBot.Resources {
         public static string imdb_usage {
             get {
                 return ResourceManager.GetString("imdb_usage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///    Looks up a localized string similar to imgur.
+        /// </summary>
+        public static string imgur_cmd {
+            get {
+                return ResourceManager.GetString("imgur_cmd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///    Looks up a localized string similar to Searches for a top imgur image, followed by a query..
+        /// </summary>
+        public static string imgur_desc {
+            get {
+                return ResourceManager.GetString("imgur_desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///    Looks up a localized string similar to `{0}imgur pikachu`.
+        /// </summary>
+        public static string imgur_usage {
+            get {
+                return ResourceManager.GetString("imgur_usage", resourceCulture);
             }
         }
         
@@ -3444,7 +3471,7 @@ namespace NadekoBot.Resources {
         }
         
         /// <summary>
-        ///    Looks up a localized string similar to Lists global or server custom reactions (15 commands per page). Running the command in DM will list global custom reactions, while running it in server will list that server&apos;s custom reactions..
+        ///    Looks up a localized string similar to Lists global or server custom reactions (20 commands per page). Running the command in DM will list global custom reactions, while running it in server will list that server&apos;s custom reactions. Specifying `all` argument instead of the number will DM you a text file with a list of all custom reactions..
         /// </summary>
         public static string listcustreact_desc {
             get {
@@ -3453,11 +3480,38 @@ namespace NadekoBot.Resources {
         }
         
         /// <summary>
-        ///    Looks up a localized string similar to `{0}lcr 1`.
+        ///    Looks up a localized string similar to `{0}lcr 1` or `{0}lcr all`.
         /// </summary>
         public static string listcustreact_usage {
             get {
                 return ResourceManager.GetString("listcustreact_usage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///    Looks up a localized string similar to listcustreactg lcrg.
+        /// </summary>
+        public static string listcustreactg_cmd {
+            get {
+                return ResourceManager.GetString("listcustreactg_cmd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///    Looks up a localized string similar to Lists global or server custom reactions (20 commands per page) grouped by trigger, and show a number of responses for each. Running the command in DM will list global custom reactions, while running it in server will list that server&apos;s custom reactions..
+        /// </summary>
+        public static string listcustreactg_desc {
+            get {
+                return ResourceManager.GetString("listcustreactg_desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///    Looks up a localized string similar to `{0}lcrg 1`.
+        /// </summary>
+        public static string listcustreactg_usage {
+            get {
+                return ResourceManager.GetString("listcustreactg_usage", resourceCulture);
             }
         }
         
@@ -5487,6 +5541,60 @@ namespace NadekoBot.Resources {
         }
         
         /// <summary>
+        ///    Looks up a localized string similar to randomgalleryimgur rgi.
+        /// </summary>
+        public static string rgi_cmd {
+            get {
+                return ResourceManager.GetString("rgi_cmd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///    Looks up a localized string similar to Looks for the top and viral images which takes arguments page number, followed by a date range (day | week | month | year | all).
+        /// </summary>
+        public static string rgi_desc {
+            get {
+                return ResourceManager.GetString("rgi_desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///    Looks up a localized string similar to `{0}randomgalleryimgur 1 day` or `{0}rgi 1 day`.
+        /// </summary>
+        public static string rgi_usage {
+            get {
+                return ResourceManager.GetString("rgi_usage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///    Looks up a localized string similar to randomimgur ri.
+        /// </summary>
+        public static string ri_cmd {
+            get {
+                return ResourceManager.GetString("ri_cmd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///    Looks up a localized string similar to Shows a random imgur image..
+        /// </summary>
+        public static string ri_desc {
+            get {
+                return ResourceManager.GetString("ri_desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///    Looks up a localized string similar to `{0}randomimgur` or `{0}ri`.
+        /// </summary>
+        public static string ri_usage {
+            get {
+                return ResourceManager.GetString("ri_usage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///    Looks up a localized string similar to rolecmd rc.
         /// </summary>
         public static string rolecmd_cmd {
@@ -6673,33 +6781,6 @@ namespace NadekoBot.Resources {
                 return ResourceManager.GetString("stop_usage", resourceCulture);
             }
         }
-		
-        /// <summary>
-        ///    Looks up a localized string similar to safeyandere sy.
-        /// </summary>
-        public static string safeyandere_cmd {
-            get {
-                return ResourceManager.GetString("sy_cmd", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///    Looks up a localized string similar to Shows a random image from yandere with a given tag. Tag is optional but preferred. (multiple tags are appended with +).
-        /// </summary>
-        public static string safeyandere_desc {
-            get {
-                return ResourceManager.GetString("sy_desc", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///    Looks up a localized string similar to `{0}sy tag1+tag2` or `{0}safeyandere tag1+tag2`.
-        /// </summary>
-        public static string safeyandere_usage {
-            get {
-                return ResourceManager.GetString("sy_usage", resourceCulture);
-            }
-        }
         
         /// <summary>
         ///    Looks up a localized string similar to take.
@@ -7674,6 +7755,33 @@ namespace NadekoBot.Resources {
         }
         
         /// <summary>
+        ///    Looks up a localized string similar to wowchar wch.
+        /// </summary>
+        public static string wowchar_cmd {
+            get {
+                return ResourceManager.GetString("wowchar_cmd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///    Looks up a localized string similar to Shows information about a player which takes region, realm name, followed by a character name..
+        /// </summary>
+        public static string wowchar_desc {
+            get {
+                return ResourceManager.GetString("wowchar_desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///    Looks up a localized string similar to `{0}wowchar us medivh lisiano` or `{0}wch us medivh lisiano`.
+        /// </summary>
+        public static string wowchar_usage {
+            get {
+                return ResourceManager.GetString("wowchar_usage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///    Looks up a localized string similar to wowjoke.
         /// </summary>
         public static string wowjoke_cmd {
@@ -7697,6 +7805,33 @@ namespace NadekoBot.Resources {
         public static string wowjoke_usage {
             get {
                 return ResourceManager.GetString("wowjoke_usage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///    Looks up a localized string similar to wowstatus wst.
+        /// </summary>
+        public static string wowstatus_cmd {
+            get {
+                return ResourceManager.GetString("wowstatus_cmd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///    Looks up a localized string similar to Checks the status of a specific region&apos;s WoW realms (e.g., us, eu, kr, tw, cn, sea), followed by a realm number..
+        /// </summary>
+        public static string wowstatus_desc {
+            get {
+                return ResourceManager.GetString("wowstatus_desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///    Looks up a localized string similar to `{0}wowstatus us 2` or `{0}wst us 2`.
+        /// </summary>
+        public static string wowstatus_usage {
+            get {
+                return ResourceManager.GetString("wowstatus_usage", resourceCulture);
             }
         }
         
@@ -7726,7 +7861,7 @@ namespace NadekoBot.Resources {
                 return ResourceManager.GetString("xkcd_usage", resourceCulture);
             }
         }
-		
+        
         /// <summary>
         ///    Looks up a localized string similar to yandere.
         /// </summary>
