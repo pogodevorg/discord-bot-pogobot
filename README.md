@@ -14,7 +14,7 @@
 * [Credits](#credits)
 
 ## What is it?
-`discord-bot-pogobot` is an open source repo for managing Discord Servers.
+`discord-bot-pogobot` is an open source repo for managing POGODev Discord Server. It is not recommended to use this to host other Discord servers.
 
 ## Installation
 ### Linux
