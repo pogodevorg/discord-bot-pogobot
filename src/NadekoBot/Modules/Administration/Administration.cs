@@ -551,7 +551,7 @@ namespace NadekoBot.Modules.Administration
                 string line_to_delete = user.Id.ToString();
                 string[] lines = File.ReadAllLines(path);
                 var results = lines.ToList();
-                for (int i = 0; i < lines.Length;i++)
+                for (int i = 0; i < lines.Count();i++)
                 {
                     if (lines[i].Equals(user.Id.ToString()))
                     {

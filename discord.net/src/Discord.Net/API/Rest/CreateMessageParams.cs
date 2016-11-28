@@ -1,4 +1,5 @@
 ﻿#pragma warning disable CS1591
+using System;
 using Newtonsoft.Json;
 
 namespace Discord.API.Rest
@@ -17,5 +18,8 @@ namespace Discord.API.Rest
         [JsonProperty("tts")]
         internal Optional<bool> _tts { get; set; }
         public bool IsTTS { set { _tts = value; } }
+
+        [JsonProperty("embed")]
+        public Optional<Embed> Embed { get; set; }
     }
 }
