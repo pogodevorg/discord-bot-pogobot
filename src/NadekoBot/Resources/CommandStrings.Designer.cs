@@ -492,6 +492,33 @@ namespace NadekoBot.Resources {
         }
         
         /// <summary>
+        ///    Looks up a localized string similar to attack.
+        /// </summary>
+        public static string attack_cmd {
+            get {
+                return ResourceManager.GetString("attack_cmd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///    Looks up a localized string similar to Attacks a target with the given move. Use `{0}movelist` to see a list of moves your type can use..
+        /// </summary>
+        public static string attack_desc {
+            get {
+                return ResourceManager.GetString("attack_desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///    Looks up a localized string similar to `{0}attack &quot;vine whip&quot; @someguy`.
+        /// </summary>
+        public static string attack_usage {
+            get {
+                return ResourceManager.GetString("attack_usage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///    Looks up a localized string similar to autoassignrole aar.
         /// </summary>
         public static string autoassignrole_cmd {
@@ -2895,6 +2922,33 @@ namespace NadekoBot.Resources {
         }
         
         /// <summary>
+        ///    Looks up a localized string similar to heal.
+        /// </summary>
+        public static string heal_cmd {
+            get {
+                return ResourceManager.GetString("heal_cmd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///    Looks up a localized string similar to Heals someone. Revives those who fainted. Costs a NadekoFlower.
+        /// </summary>
+        public static string heal_desc {
+            get {
+                return ResourceManager.GetString("heal_desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///    Looks up a localized string similar to `{0}heal @someone`.
+        /// </summary>
+        public static string heal_usage {
+            get {
+                return ResourceManager.GetString("heal_usage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///    Looks up a localized string similar to hearthstone hs.
         /// </summary>
         public static string hearthstone_cmd {
@@ -4268,6 +4322,33 @@ namespace NadekoBot.Resources {
         public static string move_usage {
             get {
                 return ResourceManager.GetString("move_usage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///    Looks up a localized string similar to movelist ml.
+        /// </summary>
+        public static string movelist_cmd {
+            get {
+                return ResourceManager.GetString("movelist_cmd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///    Looks up a localized string similar to Lists the moves you are able to use.
+        /// </summary>
+        public static string movelist_desc {
+            get {
+                return ResourceManager.GetString("movelist_desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///    Looks up a localized string similar to `{0}ml`.
+        /// </summary>
+        public static string movelist_usage {
+            get {
+                return ResourceManager.GetString("movelist_usage", resourceCulture);
             }
         }
         
@@ -6270,6 +6351,33 @@ namespace NadekoBot.Resources {
         }
         
         /// <summary>
+        ///    Looks up a localized string similar to settype.
+        /// </summary>
+        public static string settype_cmd {
+            get {
+                return ResourceManager.GetString("settype_cmd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///    Looks up a localized string similar to Set your poketype. Costs a NadekoFlower. Provide no arguments to see a list of available types..
+        /// </summary>
+        public static string settype_desc {
+            get {
+                return ResourceManager.GetString("settype_desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///    Looks up a localized string similar to `{0}settype fire` or `{0}settype`.
+        /// </summary>
+        public static string settype_usage {
+            get {
+                return ResourceManager.GetString("settype_usage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///    Looks up a localized string similar to shorten.
         /// </summary>
         public static string shorten_cmd {
@@ -6702,6 +6810,36 @@ namespace NadekoBot.Resources {
         }
         
         /// <summary>
+        ///    Looks up a localized string similar to steamuser steam.
+        /// </summary>
+        public static string steamuser_cmd {
+            get {
+                return ResourceManager.GetString("steamuser_cmd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///    Looks up a localized string similar to Searches for a specific user by their community id. You can use this to find out a user&apos;s profile or friends currently. Currently provides two options:
+        ///- profile
+        ///- friends.
+        /// </summary>
+        public static string steamuser_desc {
+            get {
+                return ResourceManager.GetString("steamuser_desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///    Looks up a localized string similar to `{0}steamuser community_id profile` or `{0}steam community_id profile`
+        ///`{0}steam community_id friends` or `{0}steam community_id friends 3`.
+        /// </summary>
+        public static string steamuser_usage {
+            get {
+                return ResourceManager.GetString("steamuser_usage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///    Looks up a localized string similar to stop s.
         /// </summary>
         public static string stop_cmd {
@@ -6968,6 +7106,33 @@ namespace NadekoBot.Resources {
         public static string twitch_usage {
             get {
                 return ResourceManager.GetString("twitch_usage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///    Looks up a localized string similar to type.
+        /// </summary>
+        public static string type_cmd {
+            get {
+                return ResourceManager.GetString("type_cmd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///    Looks up a localized string similar to Get the poketype of the target..
+        /// </summary>
+        public static string type_desc {
+            get {
+                return ResourceManager.GetString("type_desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///    Looks up a localized string similar to `{0}type @someone`.
+        /// </summary>
+        public static string type_usage {
+            get {
+                return ResourceManager.GetString("type_usage", resourceCulture);
             }
         }
         
@@ -7778,6 +7943,33 @@ namespace NadekoBot.Resources {
         public static string yandere_usage {
             get {
                 return ResourceManager.GetString("yandere_usage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///    Looks up a localized string similar to yodify yoda.
+        /// </summary>
+        public static string yodify_cmd {
+            get {
+                return ResourceManager.GetString("yodify_cmd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///    Looks up a localized string similar to Translates your normal sentences into Yoda styled sentences!.
+        /// </summary>
+        public static string yodify_desc {
+            get {
+                return ResourceManager.GetString("yodify_desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///    Looks up a localized string similar to {0}yodify I was once an adventurer like you` or `{0}yoda my feelings hurt`.
+        /// </summary>
+        public static string yodify_usage {
+            get {
+                return ResourceManager.GetString("yodify_usage", resourceCulture);
             }
         }
         

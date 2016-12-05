@@ -90,13 +90,13 @@ namespace NadekoBot
         public async Task SetGame(string game)
         {
             await Task.WhenAll((await GetAllCurrentUsersAsync())
-                                    .Select(u => u.ModifyStatusAsync(ms => ms.Game = new Game(game))));
+                                    .Select(u => u.ModifyStatusAsync(ms => ms.Game = new Discord.Game(game))));
         }
 
         public async Task SetStream(string name, string url)
         {
             await Task.WhenAll((await GetAllCurrentUsersAsync())
-                                    .Select(u => u.ModifyStatusAsync(ms => ms.Game = new Game(name, url, StreamType.Twitch))));
+                                    .Select(u => u.ModifyStatusAsync(ms => ms.Game = new Discord.Game(name, url, StreamType.Twitch))));
                 
         }
     }
