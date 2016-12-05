@@ -1,10 +1,10 @@
 ﻿using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using Microsoft.EntityFrameworkCore;
 using NadekoBot.Attributes;
 using NadekoBot.Extensions;
 using NadekoBot.Services;
-using NadekoBot.Services.Database;
 using NadekoBot.Services.Database.Models;
 using NLog;
 using System;
@@ -13,7 +13,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace NadekoBot.Modules.Games
@@ -168,7 +167,7 @@ namespace NadekoBot.Modules.Games
                 bool enabled;
                 using (var uow = DbHandler.UnitOfWork())
                 {
-                    var guildConfig = uow.GuildConfigs.For(channel.Id);
+                    var guildConfig = uow.GuildConfigs.For(channel.Id, set => set.Include(gc => gc.GenerateCurrencyChannelIds));
 
                     var toAdd = new GCChannelId() { ChannelId = channel.Id };
                     if (!guildConfig.GenerateCurrencyChannelIds.Contains(toAdd))

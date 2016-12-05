@@ -8,11 +8,13 @@ using NadekoBot.Services;
 using System.Text;
 using NadekoBot.Extensions;
 using System.Text.RegularExpressions;
-using System.Collections.Generic;
 using System.Reflection;
 using Discord.WebSocket;
-using System.Net.Http;
-using System.IO;
+using NadekoBot.Services.Impl;
+using Discord.API;
+using Embed = Discord.API.Embed;
+using EmbedAuthor = Discord.API.EmbedAuthor;
+using EmbedField = Discord.API.EmbedField;
 
 namespace NadekoBot.Modules.Utility
 {
@@ -40,9 +42,9 @@ namespace NadekoBot.Modules.Utility
 
             int i = 0;
             if (!arr.Any())
-                await channel.SendMessageAsync(_l["`Nobody is playing that game.`"]).ConfigureAwait(false);
+                await channel.SendErrorAsync("Nobody is playing that game.").ConfigureAwait(false);
             else
-                await channel.SendMessageAsync("```xl\n" + string.Join("\n", arr.GroupBy(item => (i++) / 3).Select(ig => string.Concat(ig.Select(el => $"• {el,-35}")))) + "\n```").ConfigureAwait(false);
+                await channel.SendMessageAsync("```css\n" + string.Join("\n", arr.GroupBy(item => (i++) / 3).Select(ig => string.Concat(ig.Select(el => $"• {el,-35}")))) + "\n```").ConfigureAwait(false);
         }
 
         [NadekoCommand, Usage, Description, Aliases]
@@ -53,20 +55,21 @@ namespace NadekoBot.Modules.Utility
                 return;
             var channel = (ITextChannel)umsg.Channel;
             var arg = roles.Split(',').Select(r => r.Trim().ToUpperInvariant());
-            string send = _l["`Here is a list of users in a specfic role:`"];
+            string send = _l["ℹ️ **Here is a list of users in a specfic role:**"];
             foreach (var roleStr in arg.Where(str => !string.IsNullOrWhiteSpace(str) && str != "@EVERYONE" && str != "EVERYONE"))
             {
                 var role = channel.Guild.Roles.Where(r => r.Name.ToUpperInvariant() == roleStr).FirstOrDefault();
                 if (role == null) continue;
-                send += $"\n`{role.Name}`\n";
+                send += $"```css\n[{role.Name}]\n";
                 send += string.Join(", ", channel.Guild.GetUsers().Where(u => u.Roles.Contains(role)).Select(u => u.ToString()));
+                send += $"\n```";
             }
             var usr = umsg.Author as IGuildUser;
             while (send.Length > 2000)
             {
                 if (!usr.GetPermissions(channel).ManageMessages)
                 {
-                    await channel.SendMessageAsync($"{usr.Mention} you are not allowed to use this command on roles with a lot of users in them to prevent abuse.").ConfigureAwait(false);
+                    await channel.SendMessageAsync($"⚠️ {usr.Mention} **you are not allowed to use this command on roles with a lot of users in them to prevent abuse.**").ConfigureAwait(false);
                     return;
                 }
                 var curstr = send.Substring(0, 2000);
@@ -83,7 +86,7 @@ namespace NadekoBot.Modules.Utility
         public async Task CheckMyPerms(IUserMessage msg)
         {
 
-            StringBuilder builder = new StringBuilder("```\n");
+            StringBuilder builder = new StringBuilder("```http\n");
             var user = msg.Author as IGuildUser;
             var perms = user.GetPermissions((ITextChannel)msg.Channel);
             foreach (var p in perms.GetType().GetProperties().Where(p => !p.GetGetMethod().GetParameters().Any()))
@@ -100,20 +103,20 @@ namespace NadekoBot.Modules.Utility
         public async Task UserId(IUserMessage msg, IGuildUser target = null)
         {
             var usr = target ?? msg.Author;
-            await msg.Reply($"Id of the user { usr.Username } is { usr.Id }").ConfigureAwait(false);
+            await msg.Reply($"🆔 of the user **{ usr.Username }** is `{ usr.Id }`").ConfigureAwait(false);
         }
 
         [NadekoCommand, Usage, Description, Aliases]
         public async Task ChannelId(IUserMessage msg)
         {
-            await msg.Reply($"This Channel's ID is {msg.Channel.Id}").ConfigureAwait(false);
+            await msg.Reply($"ℹ️ This **Channel's ID** is `{msg.Channel.Id}`").ConfigureAwait(false);
         }
 
         [NadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         public async Task ServerId(IUserMessage msg)
         {
-            await msg.Reply($"This server's ID is {((ITextChannel)msg.Channel).Guild.Id}").ConfigureAwait(false);
+            await msg.Reply($"ℹ️ This **Server's ID** is `{((ITextChannel)msg.Channel).Guild.Id}`").ConfigureAwait(false);
         }
 
         [NadekoCommand, Usage, Description, Aliases]
@@ -129,11 +132,11 @@ namespace NadekoBot.Modules.Utility
                 return;
             if (target != null)
             {
-                await msg.Reply($"`Page #{page} of roles for **{target.Username}**:` \n• " + string.Join("\n• ", target.Roles.Except(new[] { guild.EveryoneRole }).OrderBy(r => r.Position).Skip((page - 1) * RolesPerPage).Take(RolesPerPage)).SanitizeMentions());
+                await msg.Reply($"⚔ **Page #{page} of roles for {target.Username}:** ```css\n• " + string.Join("\n• ", target.Roles.Except(new[] { guild.EveryoneRole }).OrderBy(r => r.Position).Skip((page - 1) * RolesPerPage).Take(RolesPerPage)).SanitizeMentions() + "\n```");
             }
             else
             {
-                await msg.Reply($"`Page #{page} of all roles on this server:` \n• " + string.Join("\n• ", guild.Roles.Except(new[] { guild.EveryoneRole }).OrderBy(r => r.Position).Skip((page - 1) * RolesPerPage).Take(RolesPerPage)).SanitizeMentions());
+                await msg.Reply($"⚔ **Page #{page} of all roles on this server:** ```css\n• " + string.Join("\n• ", guild.Roles.Except(new[] { guild.EveryoneRole }).OrderBy(r => r.Position).Skip((page - 1) * RolesPerPage).Take(RolesPerPage)).SanitizeMentions() + "\n```");
             }
         }
 
@@ -150,9 +153,9 @@ namespace NadekoBot.Modules.Utility
 
             var topic = channel.Topic;
             if (string.IsNullOrWhiteSpace(topic))
-                await channel.SendMessageAsync("`No topic set.`");
+                await channel.SendMessageAsync("❎ **No topic set.**");
             else
-                await channel.SendMessageAsync("`Topic:` " + topic);
+                await channel.SendMessageAsync("ℹ️ **Topic:** " + topic);
         }
 
         [NadekoCommand, Usage, Description, Aliases]
@@ -160,7 +163,67 @@ namespace NadekoBot.Modules.Utility
         {
             var channel = umsg.Channel;
 
-            await channel.SendMessageAsync(await NadekoBot.Stats.Print());
+            var stats = NadekoBot.Stats;
+
+            await channel.EmbedAsync(
+                new Embed()
+                {
+                    Author = new EmbedAuthor()
+                    {
+                        Name = $"NadekoBot v{StatsService.BotVersion}",
+                        Url = "http://nadekobot.readthedocs.io/en/latest/",
+                        IconUrl = "https://cdn.discordapp.com/avatars/116275390695079945/b21045e778ef21c96d175400e779f0fb.jpg"
+                    },
+                    Fields = new[] {
+                        new EmbedField() {
+                            Name = "Author",
+                            Value = stats.Author,
+                            Inline = true
+                        },
+                        new EmbedField() {
+                            Name = "Library",
+                            Value = stats.Library,
+                            Inline = true
+                        },
+                        new EmbedField() {
+                            Name = "Bot ID",
+                            Value = NadekoBot.Client.GetCurrentUser().Id.ToString(),
+                            Inline = true
+                        },
+                        new EmbedField() {
+                            Name = "Commands Ran",
+                            Value = stats.CommandsRan.ToString(),
+                            Inline = true
+                        },
+                        new EmbedField() {
+                            Name = "Messages",
+                            Value = $"{stats.MessageCounter} [{stats.MessagesPerSecond:F2}/sec]",
+                            Inline = true
+                        },
+                        new EmbedField() {
+                            Name = "Memory",
+                            Value = $"{stats.Heap} MB",
+                            Inline = true
+                        },
+                        new EmbedField() {
+                            Name = "Owner ID(s)",
+                            Value = stats.OwnerIds,
+                            Inline = true
+                        },
+                        new EmbedField() {
+                            Name = "Uptime",
+                            Value = stats.GetUptimeString("\n"),
+                            Inline = true
+                        },
+                        new EmbedField() {
+                            Name = "Presence",
+                            Value = $"{NadekoBot.Client.GetGuilds().Count} servers\n{stats.TextChannels} Text Channels\n{stats.VoiceChannels} Voice Channels",
+                            Inline = true
+                        },
+
+                    },
+                    Color = NadekoBot.OkColor
+                });
         }
 
         private Regex emojiFinder { get; } = new Regex(@"<:(?<name>.+?):(?<id>\d*)>", RegexOptions.Compiled);
@@ -169,12 +232,33 @@ namespace NadekoBot.Modules.Utility
         {
             var matches = emojiFinder.Matches(emojis);
 
-
-
             var result = string.Join("\n", matches.Cast<Match>()
-                                                  .Select(m => $"`Name:` {m.Groups["name"]} `Link:` http://discordapp.com/api/emojis/{m.Groups["id"]}.png"));
+                                                  .Select(m => $"**Name:** {m.Groups["name"]} **Link:** http://discordapp.com/api/emojis/{m.Groups["id"]}.png"));
             
             await msg.Channel.SendMessageAsync(result).ConfigureAwait(false);
+        }
+
+        [NadekoCommand, Usage, Description, Aliases]
+        [RequireContext(ContextType.Guild)]
+        [OwnerOnly]
+        public async Task ListServers(IUserMessage imsg, int page = 1)
+        {
+            var channel = (ITextChannel)imsg.Channel;
+
+            page -= 1;
+
+            if (page < 0)
+                return;
+
+            var guilds = NadekoBot.Client.GetGuilds().OrderBy(g => g.Name).Skip((page - 1) * 15).Take(15);
+
+            if (!guilds.Any())
+            {
+                await channel.SendMessageAsync("❎ No servers found on that page.").ConfigureAwait(false);
+                return;
+            }
+
+            await channel.SendMessageAsync(String.Join("\n", guilds.Select(g => $"```css\nName: {g.Name} ID:{g.Id} Members:#{g.GetUsers().Count} OwnerID: {g.OwnerId} ```"))).ConfigureAwait(false);
         }
 
         //[NadekoCommand, Usage, Description, Aliases]

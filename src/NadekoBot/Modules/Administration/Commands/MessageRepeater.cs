@@ -3,12 +3,10 @@ using Discord.Commands;
 using Discord.WebSocket;
 using NadekoBot.Attributes;
 using NadekoBot.Services;
-using NadekoBot.Services.Database;
 using NadekoBot.Services.Database.Models;
 using NLog;
 using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -90,7 +88,7 @@ namespace NadekoBot.Modules.Administration
                 RepeatRunner rep;
                 if (!repeaters.TryGetValue(channel.Id, out rep))
                 {
-                    await channel.SendMessageAsync("`No repeating message found on this server.`").ConfigureAwait(false);
+                    await channel.SendMessageAsync("ℹ️ **No repeating message found on this server.**").ConfigureAwait(false);
                     return;
                 }
                 rep.Reset();
@@ -112,10 +110,10 @@ namespace NadekoBot.Modules.Administration
                         await uow.CompleteAsync();
                     }
                     rep.Stop();
-                    await channel.SendMessageAsync("`Stopped repeating a message.`").ConfigureAwait(false);
+                    await channel.SendMessageAsync("✅ **Stopped repeating a message.**").ConfigureAwait(false);
                 }
                 else
-                    await channel.SendMessageAsync("`No message is repeating.`").ConfigureAwait(false);
+                    await channel.SendMessageAsync("ℹ️ **No message is repeating.**").ConfigureAwait(false);
             }
 
             [NadekoCommand, Usage, Description, Aliases]
@@ -161,7 +159,7 @@ namespace NadekoBot.Modules.Administration
                     return old;
                 });
 
-                await channel.SendMessageAsync($"Repeating \"{rep.Repeater.Message}\" every {rep.Repeater.Interval} minutes").ConfigureAwait(false);
+                await channel.SendMessageAsync($"🔁 Repeating **\"{rep.Repeater.Message}\"** every `{rep.Repeater.Interval.Days} day(s), {rep.Repeater.Interval.Hours} hour(s) and {rep.Repeater.Interval.Minutes} minute(s)`.").ConfigureAwait(false);
             }
         }
     }

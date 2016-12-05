@@ -1,11 +1,9 @@
 using Discord;
 using Discord.Commands;
-using Discord.WebSocket;
 using NadekoBot.Attributes;
 using NadekoBot.Extensions;
 using NLog;
 using System;
-using System.Collections.Generic;
 using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
@@ -73,33 +71,10 @@ namespace NadekoBot.Modules.Administration
                     var t = Task.Run(async () =>
                     {
                         var usrMsg = umsg as IUserMessage;
-                        var usrGuild = umsg as IGuildUser;
                         var channel = usrMsg.Channel as ITextChannel;
-                        var usr = channel.GetUser(umsg.Author.Id) as IUser;
-                        ulong[] white = new ulong[] { 
-                            208441726464032769, // administrators
-                            240045137810554880, // moderators
-                            240049119035523073, // devs
-                            240049515770413057, // moderators I18n
-                            240049523370622976 // helpers
-                        };
-                        var roles = usrGuild.Roles;
-                        if (channel == null || usrMsg.IsAuthor() || usrMsg.Author.Id == channel.Guild.OwnerId)
+
+                        if (channel == null || usrMsg.IsAuthor())
                             return;
-                        for (int i = 0; i <= roles.Count; i++)
-                        {
-                            for (int x = 0; x <= white.Length; x++) {
-                               var usrGuild_Roles = channel.Guild.GetRole(white[x]);
-                               var usrGuild_Roles_Members = usrGuild_Roles.Members();
-                                foreach (IUser user_roles in usrGuild_Roles_Members)
-                                {
-                                    if (usr == user_roles)
-                                    {
-                                        return;
-                                    }
-                                }
-                            }
-                        }
                         Ratelimiter limiter;
                         if (!RatelimitingChannels.TryGetValue(channel.Id, out limiter))
                             return;
@@ -122,7 +97,7 @@ namespace NadekoBot.Modules.Administration
                 if (RatelimitingChannels.TryRemove(channel.Id, out throwaway))
                 {
                     throwaway.cancelSource.Cancel();
-                    await channel.SendMessageAsync("`Slow mode disabled.`").ConfigureAwait(false);
+                    await channel.SendMessageAsync("ℹ️ **Slow mode disabled.**").ConfigureAwait(false);
                     return;
                 }
             }
@@ -137,7 +112,7 @@ namespace NadekoBot.Modules.Administration
 
                 if (msg < 1 || perSec < 1 || msg > 100 || perSec > 3600)
                 {
-                    await channel.SendMessageAsync("`Invalid parameters.`");
+                    await channel.SendMessageAsync("⚠️ `Invalid parameters.`");
                     return;
                 }
                 var toAdd = new Ratelimiter()
@@ -148,8 +123,8 @@ namespace NadekoBot.Modules.Administration
                 };
                 if(RatelimitingChannels.TryAdd(channel.Id, toAdd))
                 {
-                    await channel.SendMessageAsync("`Slow mode initiated.` " +
-                                                $"Users can't send more than {toAdd.MaxMessages} message(s) every {toAdd.PerSeconds} second(s).")
+                    await channel.SendMessageAsync("✅ **Slow mode initiated: " +
+                                                $"Users can't send more than `{toAdd.MaxMessages} message(s)` every `{toAdd.PerSeconds} second(s)`.**")
                                                 .ConfigureAwait(false);
                 }
             }

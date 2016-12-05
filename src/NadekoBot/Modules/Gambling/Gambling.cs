@@ -2,15 +2,14 @@
 using Discord.Commands;
 using NadekoBot.Attributes;
 using NadekoBot.Extensions;
-using System;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NadekoBot.Services;
 using Discord.WebSocket;
-using NadekoBot.Services.Database;
 using NadekoBot.Services.Database.Models;
 using System.Collections.Generic;
+using NadekoBot.Services.Database;
 
 namespace NadekoBot.Modules.Gambling
 {
@@ -33,6 +32,14 @@ namespace NadekoBot.Modules.Gambling
             }
         }
 
+        public static long GetCurrency(ulong id)
+        {
+            using (var uow = DbHandler.UnitOfWork())
+            {
+                return uow.Currency.GetUserCurrency(id);
+            }
+        }
+
         [NadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         public async Task Raffle(IUserMessage umsg, [Remainder] IRole role = null)
@@ -41,10 +48,10 @@ namespace NadekoBot.Modules.Gambling
 
             role = role ?? channel.Guild.EveryoneRole;
 
-            var members = role.Members().Where(u => u.Status == UserStatus.Online);
+            var members = role.Members().Where(u => u.Status != UserStatus.Offline && u.Status != UserStatus.Unknown);
             var membersArray = members as IUser[] ?? members.ToArray();
             var usr = membersArray[new NadekoRandom().Next(0, membersArray.Length)];
-            await channel.SendMessageAsync($"**Raffled user:** {usr.Username} (id: {usr.Id})").ConfigureAwait(false);
+            await channel.SendMessageAsync($"🎟 Raffled user: **{usr.Username}#{usr.Discriminator}** ID: `{usr.Id}`").ConfigureAwait(false);
         }
 
         [NadekoCommand, Usage, Description, Aliases]
@@ -54,15 +61,8 @@ namespace NadekoBot.Modules.Gambling
             var channel = umsg.Channel;
 
             user = user ?? umsg.Author;
-            long amount;
-            BotConfig config;
-            using (var uow = DbHandler.UnitOfWork())
-            {
-                amount = uow.Currency.GetUserCurrency(user.Id);
-                config = uow.BotConfig.GetOrCreate();
-            }
 
-            await channel.SendMessageAsync($"{user.Username} has {amount} {config.CurrencySign}").ConfigureAwait(false);
+            await channel.SendMessageAsync($"{user.Username} has {GetCurrency(user.Id)} {CurrencySign}").ConfigureAwait(false);
         }
 
         [NadekoCommand, Usage, Description, Aliases]
@@ -71,15 +71,7 @@ namespace NadekoBot.Modules.Gambling
         {
             var channel = umsg.Channel;
 
-            long amount;
-            BotConfig config;
-            using (var uow = DbHandler.UnitOfWork())
-            {
-                amount = uow.Currency.GetUserCurrency(userId);
-                config = uow.BotConfig.GetOrCreate();
-            }
-
-            await channel.SendMessageAsync($"`{userId}` has {amount} {config.CurrencySign}").ConfigureAwait(false);
+            await channel.SendMessageAsync($"`{userId}` has {GetCurrency(userId)} {CurrencySign}").ConfigureAwait(false);
         }
 
         [NadekoCommand, Usage, Description, Aliases]
@@ -202,9 +194,9 @@ namespace NadekoBot.Modules.Gambling
             var str = $"{guildUser.Mention} `You rolled {rng}.` ";
             if (rng < 67)
             {
-                str += "More luck next time.";
+                str += "Better luck next time.";
             }
-            else if (rng < 90)
+            else if (rng < 91)
             {
                 str += $"Congratulations! You won {amount * 2}{Gambling.CurrencySign} for rolling above 66";
                 await CurrencyHandler.AddCurrencyAsync(guildUser, "Betroll Gamble", amount * 2, false).ConfigureAwait(false);

@@ -1,4 +1,5 @@
 ﻿using Discord;
+using Discord.API;
 using Discord.Commands;
 using NadekoBot.Attributes;
 using NadekoBot.Extensions;
@@ -8,7 +9,6 @@ using Newtonsoft.Json.Linq;
 using NLog;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -38,9 +38,36 @@ namespace NadekoBot.Modules.Searches
                 if (string.IsNullOrWhiteSpace(query))
                     return;
 
-                var result = await GetAnimeData(query).ConfigureAwait(false);
+                var animeData = await GetAnimeData(query).ConfigureAwait(false);
 
-                await channel.SendMessageAsync(result.ToString() ?? "`No anime found.`").ConfigureAwait(false);
+                var embed = new Discord.API.Embed()
+                {
+                    Description = animeData.Synopsis,
+                    Title = animeData.title_english,
+                    Url = animeData.Link,
+                    Image = new Discord.API.EmbedImage() {
+                        Url = animeData.image_url_lge
+                    },
+                    Fields = new[] {
+                        new Discord.API.EmbedField() {
+                            Inline = true,
+                            Name = "Episodes",
+                            Value = animeData.total_episodes.ToString()
+                        },
+                        new Discord.API.EmbedField() {
+                            Inline = true,
+                            Name = "Status",
+                            Value =  animeData.AiringStatus.ToString()
+                        },
+                        new Discord.API.EmbedField() {
+                            Inline = true,
+                            Name = "Genres",
+                            Value = String.Join(", ", animeData.Genres)
+                        }
+                    },
+                    Color = NadekoBot.OkColor
+                };
+                await channel.EmbedAsync(embed).ConfigureAwait(false);
             }
 
             [NadekoCommand, Usage, Description, Aliases]
@@ -52,9 +79,38 @@ namespace NadekoBot.Modules.Searches
                 if (string.IsNullOrWhiteSpace(query))
                     return;
 
-                var result = await GetMangaData(query).ConfigureAwait(false);
+                var animeData = await GetMangaData(query).ConfigureAwait(false);
 
-                await channel.SendMessageAsync(result.ToString() ?? "`No manga found.`").ConfigureAwait(false);
+                var embed = new Discord.API.Embed()
+                {
+                    Description = animeData.Synopsis,
+                    Title = animeData.title_english,
+                    Url = animeData.Link,
+                    Image = new Discord.API.EmbedImage()
+                    {
+                        Url = animeData.image_url_lge
+                    },
+                    Fields = new[] {
+                        new Discord.API.EmbedField() {
+                            Inline = true,
+                            Name = "Chapters",
+                            Value = animeData.total_chapters.ToString()
+                        },
+                        new Discord.API.EmbedField() {
+                            Inline = true,
+                            Name = "Status",
+                            Value =  animeData.publishing_status.ToString()
+                        },
+                        new Discord.API.EmbedField() {
+                            Inline = true,
+                            Name = "Genres",
+                            Value = String.Join(", ", animeData.Genres)
+                        }
+                    },
+                    Color = NadekoBot.OkColor
+                };
+
+                await channel.EmbedAsync(embed).ConfigureAwait(false);
             }
 
             private async Task<AnimeResult> GetAnimeData(string query)
@@ -72,7 +128,7 @@ namespace NadekoBot.Modules.Searches
                         var smallObj = JArray.Parse(res)[0];
                         var aniData = await http.GetStringAsync("http://anilist.co/api/anime/" + smallObj["id"] + $"?access_token={anilistToken}").ConfigureAwait(false);
 
-                        return await Task.Run(() => JsonConvert.DeserializeObject<AnimeResult>(aniData)).ConfigureAwait(false);
+                        return await Task.Run(() => { try { return JsonConvert.DeserializeObject<AnimeResult>(aniData); } catch { return null; } }).ConfigureAwait(false);
                     }
                 }
                 catch (Exception ex) {
@@ -118,7 +174,7 @@ namespace NadekoBot.Modules.Searches
                         var smallObj = JArray.Parse(res)[0];
                         var aniData = await http.GetStringAsync("http://anilist.co/api/manga/" + smallObj["id"] + $"?access_token={anilistToken}").ConfigureAwait(false);
 
-                        return await Task.Run(() => JsonConvert.DeserializeObject<MangaResult>(aniData)).ConfigureAwait(false);
+                        return await Task.Run(() => { try { return JsonConvert.DeserializeObject<MangaResult>(aniData); } catch { return null; } }).ConfigureAwait(false);
                     }
                 }
                 catch (Exception ex)

@@ -1,12 +1,8 @@
-using Discord;
+﻿using Discord;
 using Discord.Commands;
 using NadekoBot.Attributes;
 using NadekoBot.Services;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace NadekoBot.Modules.Searches
@@ -27,7 +23,6 @@ namespace NadekoBot.Modules.Searches
                 Cage, //http://www.placecage.com
                 Steven, //http://www.stevensegallery.com
                 Beard, //http://placebeard.it
-                Img, //https://placeimg.com doesn't embed
                 Fill, //http://www.fillmurray.com
                 Bear, //https://www.placebear.com
                 Kitten, //http://placekitten.com
@@ -88,11 +83,6 @@ namespace NadekoBot.Modules.Searches
 
                 url += $"/{width}/{height}";
 
-                //using (var http = new HttpClient())
-                //{
-                //    var res = await http.GetStreamAsync(url).ConfigureAwait(false);
-                //    await channel.SendFileAsync()
-                //}
                 await channel.SendMessageAsync(url).ConfigureAwait(false);
             }
         }

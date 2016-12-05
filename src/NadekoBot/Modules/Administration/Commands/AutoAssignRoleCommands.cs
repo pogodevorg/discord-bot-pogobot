@@ -25,19 +25,23 @@ namespace NadekoBot.Modules.Administration
                 {
                     var t = Task.Run(async () =>
                     {
-                        GuildConfig conf;
-                        using (var uow = DbHandler.UnitOfWork())
+                        try
                         {
-                            conf = uow.GuildConfigs.For(user.Guild.Id);
+                            GuildConfig conf;
+                            using (var uow = DbHandler.UnitOfWork())
+                            {
+                                conf = uow.GuildConfigs.For(user.Guild.Id, set => set);
+                            }
+
+                            if (conf.AutoAssignRoleId == 0)
+                                return;
+
+                            var role = user.Guild.Roles.FirstOrDefault(r => r.Id == conf.AutoAssignRoleId);
+
+                            if (role != null)
+                                await user.AddRolesAsync(role);
                         }
-
-                        if (conf.AutoAssignRoleId == 0)
-                            return;
-
-                        var role = user.Guild.Roles.FirstOrDefault(r => r.Id == conf.AutoAssignRoleId);
-
-                        if (role != null)
-                            try { await user.AddRolesAsync(role); } catch (Exception ex) { _log.Warn(ex); }
+                        catch (Exception ex) { _log.Warn(ex); }
                     });
                     return Task.CompletedTask;
                 };
@@ -53,23 +57,22 @@ namespace NadekoBot.Modules.Administration
                 GuildConfig conf;
                 using (var uow = DbHandler.UnitOfWork())
                 {
-                    conf = uow.GuildConfigs.For(channel.Guild.Id);
+                    conf = uow.GuildConfigs.For(channel.Guild.Id, set => set);
                     if (role == null)
                         conf.AutoAssignRoleId = 0;
                     else
                         conf.AutoAssignRoleId = role.Id;
 
-                    uow.GuildConfigs.Update(conf);
                     await uow.CompleteAsync().ConfigureAwait(false);
                 }
 
                 if (role == null)
                 {
-                    await channel.SendMessageAsync("`Auto assign role on user join is now disabled.`").ConfigureAwait(false);
+                    await channel.SendMessageAsync("🆗 **Auto assign role** on user join is now **disabled**.").ConfigureAwait(false);
                     return;
                 }
 
-                await channel.SendMessageAsync("`Auto assigned role is set.`").ConfigureAwait(false);
+                await channel.SendMessageAsync("✅ **Auto assign role** on user join is now **enabled**.").ConfigureAwait(false);
             }
         }
     }

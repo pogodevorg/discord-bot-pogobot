@@ -7,7 +7,6 @@ using NLog;
 using System;
 using System.Globalization;
 using System.IO;
-using System.Net;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -49,7 +48,7 @@ namespace NadekoBot.Modules.Searches
                         MemoryStream ms = new MemoryStream();
                         res.CopyTo(ms);
                         ms.Position = 0;
-                        await channel.SendFileAsync(ms, $"{usr}.png", $"`Profile Link:`https://osu.ppy.sh/u/{Uri.EscapeDataString(usr)}\n`Image provided by https://lemmmy.pw/osusig`").ConfigureAwait(false);
+                        await channel.SendFileAsync(ms, $"{usr}.png", $"🎧 **Profile Link: **https://osu.ppy.sh/u/{Uri.EscapeDataString(usr)}\n`Image provided by https://lemmmy.pw/osusig`").ConfigureAwait(false);
                     }
                     catch (Exception ex)
                     {
