@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace NadekoBot.Services.Database.Models
+﻿namespace NadekoBot.Services.Database.Models
 {
     public class FollowedStream : DbEntity
     {
@@ -16,6 +10,22 @@ namespace NadekoBot.Services.Database.Models
         public enum FollowedStreamType
         {
             Twitch, Hitbox, Beam
+        }
+
+        public override int GetHashCode() => 
+            ChannelId.GetHashCode() ^ 
+            Username.GetHashCode() ^ 
+            Type.GetHashCode();
+
+        public override bool Equals(object obj)
+        {
+            var fs = obj as FollowedStream;
+            if (fs == null)
+                return false;
+
+            return fs.ChannelId == ChannelId && 
+                   fs.Username.ToLowerInvariant().Trim() == Username.ToLowerInvariant().Trim() &&
+                   fs.Type == Type;
         }
     }
 }

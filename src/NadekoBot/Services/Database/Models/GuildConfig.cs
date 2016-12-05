@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace NadekoBot.Services.Database.Models
 {
@@ -13,9 +8,10 @@ namespace NadekoBot.Services.Database.Models
         public bool DeleteMessageOnCommand { get; set; }
         public ulong AutoAssignRoleId { get; set; }
         //greet stuff
-        public bool AutoDeleteGreetMessages { get; set; }
-        public bool AutoDeleteByeMessages { get; set; }
+        public bool AutoDeleteGreetMessages { get; set; } //unused
+        public bool AutoDeleteByeMessages { get; set; } // unused
         public int AutoDeleteGreetMessagesTimer { get; set; } = 30;
+        public int AutoDeleteByeMessagesTimer { get; set; } = 30;
 
         public ulong GreetMessageChannelId { get; set; }
         public ulong ByeMessageChannelId { get; set; }
@@ -59,6 +55,7 @@ namespace NadekoBot.Services.Database.Models
         public HashSet<FilterChannelId> FilterWordsChannelIds { get; set; } = new HashSet<FilterChannelId>();
 
         public string MuteRoleName { get; set; }
+        public bool CleverbotEnabled { get; set; }
     }
 
     public class FilterChannelId :DbEntity

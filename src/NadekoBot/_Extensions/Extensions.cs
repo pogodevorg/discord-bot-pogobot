@@ -1,12 +1,13 @@
 ﻿using Discord;
+using Discord.API;
 using Discord.WebSocket;
-using ImageProcessorCore;
+using ImageSharp;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
@@ -155,10 +156,16 @@ namespace NadekoBot.Extensions
             return list.ToArray();
         }
 
+        public static Task<IUserMessage> EmbedAsync(this IMessageChannel ch, Discord.API.Embed embed, string msg = "")
+             => ch.SendMessageAsync(msg, embed: embed);
+
+        public static Task<IUserMessage> SendErrorAsync(this IMessageChannel ch, string error, string title = null, string url = null)
+             => ch.SendMessageAsync("", embed: new Embed() { Description = error, Title = title, Url = url, Color = NadekoBot.ErrorColor });
+
         public static Task<IUserMessage> SendTableAsync<T>(this IMessageChannel ch, string seed, IEnumerable<T> items, Func<T, string> howToPrint, int columns = 3)
         {
             var i = 0;
-            return ch.SendMessageAsync($@"{seed}```xl
+            return ch.SendMessageAsync($@"{seed}```css
 {string.Join("\n", items.GroupBy(item => (i++) / columns)
                         .Select(ig => string.Concat(ig.Select(el => howToPrint(el)))))}
 ```");
@@ -212,6 +219,18 @@ namespace NadekoBot.Extensions
             if (str.Length < maxLength)
                 return str;
             return string.Concat(str.Take(maxLength - 3)) + (hideDots ? "" : "...");
+        }
+
+        public static string ToTitleCase(this string str)
+        {
+            var tokens = str.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+            for (var i = 0; i < tokens.Length; i++)
+            {
+                var token = tokens[i];
+                tokens[i] = token.Substring(0, 1).ToUpper() + token.Substring(1);
+            }
+
+            return string.Join(" ", tokens);
         }
 
         /// <summary>
@@ -286,6 +305,9 @@ namespace NadekoBot.Extensions
             return ms;
 
         }
+
+        public static string ToJson<T>(this T any, Formatting formatting = Formatting.Indented) => 
+            JsonConvert.SerializeObject(any, formatting);
 
         public static int KiB(this int value) => value * 1024;
         public static int KB(this int value) => value * 1000;

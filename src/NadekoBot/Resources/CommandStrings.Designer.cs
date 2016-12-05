@@ -96,7 +96,7 @@ namespace NadekoBot.Resources {
         }
         
         /// <summary>
-        ///    Looks up a localized string similar to Add a custom reaction with a trigger and a response. Running this command in server requires Administration permission. Running this command in DM is Bot Owner only and adds a new global custom reaction. Guide here: &lt;http://nadekobot.readthedocs.io/en/1.0/Custom%20Reactions/&gt;.
+        ///    Looks up a localized string similar to Add a custom reaction with a trigger and a response. Running this command in server requires Administration permission. Running this command in DM is Bot Owner only and adds a new global custom reaction. Guide here: &lt;http://nadekobot.readthedocs.io/en/latest/Custom%20Reactions/&gt;.
         /// </summary>
         public static string addcustreact_desc {
             get {
@@ -906,7 +906,7 @@ namespace NadekoBot.Resources {
         }
         
         /// <summary>
-        ///    Looks up a localized string similar to Toggles automatic deletion of bye messages..
+        ///    Looks up a localized string similar to Sets the time it takes (in seconds) for bye messages to be auto-deleted. Set 0 to disable automatic deletion..
         /// </summary>
         public static string byedel_desc {
             get {
@@ -915,7 +915,7 @@ namespace NadekoBot.Resources {
         }
         
         /// <summary>
-        ///    Looks up a localized string similar to `{0}byedel`.
+        ///    Looks up a localized string similar to `{0}byedel 0` or `{0}byedel 30`.
         /// </summary>
         public static string byedel_usage {
             get {
@@ -2688,7 +2688,7 @@ namespace NadekoBot.Resources {
         }
         
         /// <summary>
-        ///    Looks up a localized string similar to Toggles automatic deletion of greet messages..
+        ///    Looks up a localized string similar to Sets the time it takes (in seconds) for greet messages to be auto-deleted. Set 0 to disable automatic deletion..
         /// </summary>
         public static string greetdel_desc {
             get {
@@ -2697,7 +2697,7 @@ namespace NadekoBot.Resources {
         }
         
         /// <summary>
-        ///    Looks up a localized string similar to `{0}greetdel`.
+        ///    Looks up a localized string similar to `{0}greetdel 0` or `{0}greetdel 30`.
         /// </summary>
         public static string greetdel_usage {
             get {
@@ -3134,33 +3134,6 @@ namespace NadekoBot.Resources {
         public static string imdb_usage {
             get {
                 return ResourceManager.GetString("imdb_usage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///    Looks up a localized string similar to imgur.
-        /// </summary>
-        public static string imgur_cmd {
-            get {
-                return ResourceManager.GetString("imgur_cmd", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///    Looks up a localized string similar to Searches for a top imgur image, followed by a query..
-        /// </summary>
-        public static string imgur_desc {
-            get {
-                return ResourceManager.GetString("imgur_desc", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///    Looks up a localized string similar to `{0}imgur pikachu`.
-        /// </summary>
-        public static string imgur_usage {
-            get {
-                return ResourceManager.GetString("imgur_usage", resourceCulture);
             }
         }
         
@@ -3998,6 +3971,33 @@ namespace NadekoBot.Resources {
         public static string magicitem_usage {
             get {
                 return ResourceManager.GetString("magicitem_usage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///    Looks up a localized string similar to magicthegathering mtg.
+        /// </summary>
+        public static string magicthegathering_cmd {
+            get {
+                return ResourceManager.GetString("magicthegathering_cmd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///    Looks up a localized string similar to Searches for a Magic The Gathering card..
+        /// </summary>
+        public static string magicthegathering_desc {
+            get {
+                return ResourceManager.GetString("magicthegathering_desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///    Looks up a localized string similar to `{0}magicthegathering about face` or `{0}mtg about face`.
+        /// </summary>
+        public static string magicthegathering_usage {
+            get {
+                return ResourceManager.GetString("magicthegathering_usage", resourceCulture);
             }
         }
         
@@ -5280,7 +5280,7 @@ namespace NadekoBot.Resources {
         }
         
         /// <summary>
-        ///    Looks up a localized string similar to Removes notifications of a certain streamer on this channel..
+        ///    Looks up a localized string similar to Removes notifications of a certain streamer from a certain platform on this channel..
         /// </summary>
         public static string removestream_desc {
             get {
@@ -5289,7 +5289,7 @@ namespace NadekoBot.Resources {
         }
         
         /// <summary>
-        ///    Looks up a localized string similar to `{0}rms SomeGuy`.
+        ///    Looks up a localized string similar to `{0}rms Twitch SomeGuy` or `{0}rms Beam SomeOtherGuy`.
         /// </summary>
         public static string removestream_usage {
             get {
@@ -5537,60 +5537,6 @@ namespace NadekoBot.Resources {
         public static string revimg_usage {
             get {
                 return ResourceManager.GetString("revimg_usage", resourceCulture);
-            }
-        }
-		
-        /// <summary>
-        ///    Looks up a localized string similar to randomgalleryimgur rgi.
-        /// </summary>
-        public static string rgi_cmd {
-            get {
-                return ResourceManager.GetString("rgi_cmd", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///    Looks up a localized string similar to Looks for the top and viral images which takes arguments page number, followed by a date range (day | week | month | year | all).
-        /// </summary>
-        public static string rgi_desc {
-            get {
-                return ResourceManager.GetString("rgi_desc", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///    Looks up a localized string similar to `{0}randomgalleryimgur 1 day` or `{0}rgi 1 day`.
-        /// </summary>
-        public static string rgi_usage {
-            get {
-                return ResourceManager.GetString("rgi_usage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///    Looks up a localized string similar to randomimgur ri.
-        /// </summary>
-        public static string ri_cmd {
-            get {
-                return ResourceManager.GetString("ri_cmd", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///    Looks up a localized string similar to Shows a random imgur image..
-        /// </summary>
-        public static string ri_desc {
-            get {
-                return ResourceManager.GetString("ri_desc", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///    Looks up a localized string similar to `{0}randomimgur` or `{0}ri`.
-        /// </summary>
-        public static string ri_usage {
-            get {
-                return ResourceManager.GetString("ri_usage", resourceCulture);
             }
         }
         
@@ -7755,33 +7701,6 @@ namespace NadekoBot.Resources {
         }
         
         /// <summary>
-        ///    Looks up a localized string similar to wowchar wch.
-        /// </summary>
-        public static string wowchar_cmd {
-            get {
-                return ResourceManager.GetString("wowchar_cmd", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///    Looks up a localized string similar to Shows information about a player which takes region, realm name, followed by a character name..
-        /// </summary>
-        public static string wowchar_desc {
-            get {
-                return ResourceManager.GetString("wowchar_desc", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///    Looks up a localized string similar to `{0}wowchar us medivh lisiano` or `{0}wch us medivh lisiano`.
-        /// </summary>
-        public static string wowchar_usage {
-            get {
-                return ResourceManager.GetString("wowchar_usage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///    Looks up a localized string similar to wowjoke.
         /// </summary>
         public static string wowjoke_cmd {
@@ -7805,33 +7724,6 @@ namespace NadekoBot.Resources {
         public static string wowjoke_usage {
             get {
                 return ResourceManager.GetString("wowjoke_usage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///    Looks up a localized string similar to wowstatus wst.
-        /// </summary>
-        public static string wowstatus_cmd {
-            get {
-                return ResourceManager.GetString("wowstatus_cmd", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///    Looks up a localized string similar to Checks the status of a specific region&apos;s WoW realms (e.g., us, eu, kr, tw, cn, sea), followed by a realm number..
-        /// </summary>
-        public static string wowstatus_desc {
-            get {
-                return ResourceManager.GetString("wowstatus_desc", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///    Looks up a localized string similar to `{0}wowstatus us 2` or `{0}wst us 2`.
-        /// </summary>
-        public static string wowstatus_usage {
-            get {
-                return ResourceManager.GetString("wowstatus_usage", resourceCulture);
             }
         }
         

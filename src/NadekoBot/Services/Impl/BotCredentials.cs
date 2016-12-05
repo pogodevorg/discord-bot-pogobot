@@ -1,6 +1,5 @@
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using Discord;
 using System.Linq;
@@ -17,9 +16,6 @@ namespace NadekoBot.Services.Impl
         public ulong BotId { get; }
 
         public string GoogleApiKey { get; }
-		
-        public string ImgurApiKey { get; }
-        public string BlizzardApiKey { get; }
 
         public string MashapeKey { get; }
 
@@ -58,8 +54,6 @@ namespace NadekoBot.Services.Impl
                 OwnerIds = data.GetSection("OwnerIds").GetChildren().Select(c => ulong.Parse(c.Value)).ToArray();
                 LoLApiKey = data[nameof(LoLApiKey)];
                 GoogleApiKey = data[nameof(GoogleApiKey)];
-                ImgurApiKey = data[nameof(ImgurApiKey)];
-                BlizzardApiKey = data[nameof(BlizzardApiKey)];
                 MashapeKey = data[nameof(MashapeKey)];
                 OsuApiKey = data[nameof(OsuApiKey)];
 
@@ -74,11 +68,11 @@ namespace NadekoBot.Services.Impl
                 SoundCloudClientId = data[nameof(SoundCloudClientId)];
                 CarbonKey = data[nameof(CarbonKey)];
                 var dbSection = data.GetSection("db");
-                Db = new DBConfig(string.IsNullOrWhiteSpace(dbSection["Type"])
-                                ? "sqlite"
-                                : dbSection["Type"],
-                            string.IsNullOrWhiteSpace(dbSection["ConnectionString"])
-                                ? "Filename=./data/NadekoBot.db"
+                Db = new DBConfig(string.IsNullOrWhiteSpace(dbSection["Type"]) 
+                                ? "sqlite" 
+                                : dbSection["Type"], 
+                            string.IsNullOrWhiteSpace(dbSection["ConnectionString"]) 
+                                ? "Filename=./data/NadekoBot.db" 
                                 : dbSection["ConnectionString"]);
             }
             catch (Exception ex)
@@ -87,7 +81,7 @@ namespace NadekoBot.Services.Impl
                 _log.Fatal(ex);
                 throw;
             }
-
+            
         }
 
         private class CredentialsModel
@@ -97,8 +91,6 @@ namespace NadekoBot.Services.Impl
             public ulong[] OwnerIds { get; set; } = new ulong[1];
             public string LoLApiKey { get; set; } = "";
             public string GoogleApiKey { get; set; } = "";
-            public string ImgurApiKey { get; set; } = "";
-            public string BlizzardApiKey { get; set; } = "";
             public string MashapeKey { get; set; } = "";
             public string OsuApiKey { get; set; } = "";
             public string SoundCloudClientId { get; set; } = "";

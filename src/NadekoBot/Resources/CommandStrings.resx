@@ -166,10 +166,10 @@
     <value>greetdel grdel</value>
   </data>
   <data name="greetdel_desc" xml:space="preserve">
-    <value>Toggles automatic deletion of greet messages.</value>
+    <value>Sets the time it takes (in seconds) for greet messages to be auto-deleted. Set 0 to disable automatic deletion.</value>
   </data>
   <data name="greetdel_usage" xml:space="preserve">
-    <value>`{0}greetdel`</value>
+    <value>`{0}greetdel 0` or `{0}greetdel 30`</value>
   </data>
   <data name="greet_cmd" xml:space="preserve">
     <value>greet</value>
@@ -211,10 +211,10 @@
     <value>byedel</value>
   </data>
   <data name="byedel_desc" xml:space="preserve">
-    <value>Toggles automatic deletion of bye messages.</value>
+    <value>Sets the time it takes (in seconds) for bye messages to be auto-deleted. Set 0 to disable automatic deletion.</value>
   </data>
   <data name="byedel_usage" xml:space="preserve">
-    <value>`{0}byedel`</value>
+    <value>`{0}byedel 0` or `{0}byedel 30`</value>
   </data>
   <data name="greetdm_cmd" xml:space="preserve">
     <value>greetdm</value>
@@ -427,7 +427,7 @@
     <value>addcustreact acr</value>
   </data>
   <data name="addcustreact_desc" xml:space="preserve">
-    <value>Add a custom reaction with a trigger and a response. Running this command in server requires Administration permission. Running this command in DM is Bot Owner only and adds a new global custom reaction. Guide here: &lt;http://nadekobot.readthedocs.io/en/1.0/Custom%20Reactions/&gt;</value>
+    <value>Add a custom reaction with a trigger and a response. Running this command in server requires Administration permission. Running this command in DM is Bot Owner only and adds a new global custom reaction. Guide here: &lt;http://nadekobot.readthedocs.io/en/latest/Custom%20Reactions/&gt;</value>
   </data>
   <data name="addcustreact_usage" xml:space="preserve">
     <value>`{0}acr "hello" Hi there %user%`</value>
@@ -1759,10 +1759,10 @@
     <value>removestream rms</value>
   </data>
   <data name="removestream_desc" xml:space="preserve">
-    <value>Removes notifications of a certain streamer on this channel.</value>
+    <value>Removes notifications of a certain streamer from a certain platform on this channel.</value>
   </data>
   <data name="removestream_usage" xml:space="preserve">
-    <value>`{0}rms SomeGuy`</value>
+    <value>`{0}rms Twitch SomeGuy` or `{0}rms Beam SomeOtherGuy`</value>
   </data>
   <data name="liststreams_cmd" xml:space="preserve">
     <value>liststreams ls</value>
@@ -2691,24 +2691,6 @@
   <data name="bfu_usage" xml:space="preserve">
     <value>`{0}bfu platform game user`</value>
   </data>
-  <data name="imgur_cmd" xml:space="preserve">
-    <value>imgur</value>
-  </data>
-  <data name="imgur_desc" xml:space="preserve">
-    <value>Searches for a top imgur image, followed by a query.</value>
-  </data>
-  <data name="imgur_usage" xml:space="preserve">
-    <value>`{0}imgur pikachu`</value>
-  </data>
-  <data name="ri_cmd" xml:space="preserve">
-    <value>randomimgur ri</value>
-  </data>
-  <data name="ri_desc" xml:space="preserve">
-    <value>Shows a random imgur image.</value>
-  </data>
-  <data name="ri_usage" xml:space="preserve">
-    <value>`{0}randomimgur` or `{0}ri`</value>
-  </data>
   <data name="yandere_cmd" xml:space="preserve">
     <value>yandere</value>
   </data>
@@ -2718,31 +2700,13 @@
   <data name="yandere_usage" xml:space="preserve">
     <value>`{0}yandere tag1+tag2`</value>
   </data>
-  <data name="wowstatus_cmd" xml:space="preserve">
-    <value>wowstatus wst</value>
+  <data name="magicthegathering_cmd" xml:space="preserve">
+    <value>magicthegathering mtg</value>
   </data>
-  <data name="wowstatus_desc" xml:space="preserve">
-    <value>Checks the status of a specific region's WoW realms (e.g., us, eu, kr, tw, cn, sea), followed by a realm number.</value>
+  <data name="magicthegathering_desc" xml:space="preserve">
+    <value>Searches for a Magic The Gathering card.</value>
   </data>
-  <data name="wowstatus_usage" xml:space="preserve">
-    <value>`{0}wowstatus us 2` or `{0}wst us 2`</value>
-  </data>
-  <data name="wowchar_cmd" xml:space="preserve">
-    <value>wowchar wch</value>
-  </data>
-  <data name="wowchar_desc" xml:space="preserve">
-    <value>Shows information about a player which takes region, realm name, followed by a character name.</value>
-  </data>
-  <data name="wowchar_usage" xml:space="preserve">
-    <value>`{0}wowchar us medivh lisiano` or `{0}wch us medivh lisiano`</value>
-  </data>
-  <data name="rgi_cmd" xml:space="preserve">
-    <value>randomgalleryimgur rgi</value>
-  </data>
-  <data name="rgi_desc" xml:space="preserve">
-    <value>Looks for the top and viral images which takes arguments page number, followed by a date range (day | week | month | year | all)</value>
-  </data>
-  <data name="rgi_usage" xml:space="preserve">
-    <value>`{0}randomgalleryimgur 1 day` or `{0}rgi 1 day`</value>
+  <data name="magicthegathering_usage" xml:space="preserve">
+    <value>`{0}magicthegathering about face` or `{0}mtg about face`</value>
   </data>
 </root>

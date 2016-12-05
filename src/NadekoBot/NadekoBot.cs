@@ -2,31 +2,30 @@
 using Discord.Commands;
 using Discord.WebSocket;
 using NadekoBot.Services;
-using NadekoBot.Services.Database;
 using NadekoBot.Services.Impl;
 using NLog;
 using NLog.Config;
 using NLog.Targets;
 using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using NadekoBot.Modules.Permissions;
 using Module = Discord.Commands.Module;
 using NadekoBot.TypeReaders;
 using System.Collections.Concurrent;
 using NadekoBot.Modules.Music;
 using NadekoBot.Services.Database.Models;
-using Microsoft.Extensions.Configuration;
 
 namespace NadekoBot
 {
     public class NadekoBot
     {
         private Logger _log;
+        
+        public static uint OkColor { get; } = 0x00ff00;
+        public static uint ErrorColor { get; } = 0xff0000;
 
         public static CommandService CommandService { get; private set; }
         public static CommandHandler CommandHandler { get; private set; }
@@ -44,8 +43,8 @@ namespace NadekoBot
 
         static NadekoBot()
         {
-          SetupLogger();
-          Credentials = new BotCredentials();
+            SetupLogger();
+            Credentials = new BotCredentials();
 
             using (var uow = DbHandler.UnitOfWork())
             {
@@ -55,13 +54,9 @@ namespace NadekoBot
 
         public async Task RunAsync(params string[] args)
         {
-            SetupLogger();
             _log = LogManager.GetCurrentClassLogger();
 
             _log.Info("Starting NadekoBot v" + StatsService.BotVersion);
-
-
-            Credentials = new BotCredentials();
 
             //create client
             Client = new ShardedDiscordClient(new DiscordSocketConfig

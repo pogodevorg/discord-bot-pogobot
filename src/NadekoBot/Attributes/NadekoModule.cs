@@ -39,9 +39,10 @@ namespace NadekoBot.Attributes
                 NadekoBot.ModulePrefixes.TryAdd(moduleName, defaultPrefix);
                 NLog.LogManager.GetCurrentClassLogger().Warn("Prefix not found for {0}. Will use default one: {1}", moduleName, defaultPrefix);
             }
-
+            
 
             return prefix ?? defaultPrefix;
         }
     }
 }
+

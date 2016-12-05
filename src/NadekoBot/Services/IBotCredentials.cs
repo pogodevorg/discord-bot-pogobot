@@ -1,6 +1,4 @@
 ﻿using Discord;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace NadekoBot.Services
 {
@@ -11,8 +9,6 @@ namespace NadekoBot.Services
 
         string Token { get; }
         string GoogleApiKey { get; }
-        string ImgurApiKey { get; }
-        string BlizzardApiKey { get; }
         ulong[] OwnerIds { get; }
         string MashapeKey { get; }
         string LoLApiKey { get; }

@@ -1,11 +1,8 @@
 ﻿using NadekoBot.Services.Database.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using NadekoBot.Services.Database;
 
 namespace NadekoBot.Services.Database.Repositories.Impl
 {
@@ -17,8 +14,8 @@ namespace NadekoBot.Services.Database.Repositories.Impl
 
         public IEnumerable<Quote> GetAllQuotesByKeyword(ulong guildId, string keyword) => 
             _set.Where(q => q.GuildId == guildId && q.Keyword == keyword);
-			
-		public IEnumerable<Quote> GetGroup(int skip, int take) => 
+
+        public IEnumerable<Quote> GetGroup(int skip, int take) => 
             _set.OrderBy(q => q.Keyword).Skip(skip).Take(take).ToList();
 
         public Task<Quote> GetRandomQuoteByKeywordAsync(ulong guildId, string keyword)

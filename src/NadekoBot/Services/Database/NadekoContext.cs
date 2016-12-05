@@ -40,9 +40,13 @@ namespace NadekoBot.Services.Database
 
         public NadekoContext(DbContextOptions options) : base(options)
         {
-          this.Database.Migrate();
-          EnsureSeedData();
+            this.Database.Migrate();
+            EnsureSeedData();
         }
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    optionsBuilder.UseSqlite("Filename=./data/NadekoBot.db");
+        //}
 
         public void EnsureSeedData()
         {
@@ -114,11 +118,11 @@ namespace NadekoBot.Services.Database
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             #region QUOTES
-
+            
             var quoteEntity = modelBuilder.Entity<Quote>();
 
             #endregion
-
+            
             #region Donators
 
             var donatorEntity = modelBuilder.Entity<Donator>();
@@ -143,7 +147,7 @@ namespace NadekoBot.Services.Database
             //    .HasMany(c => c.ModulePrefixes)
             //    .WithOne(mp => mp.BotConfig)
             //    .HasForeignKey(mp => mp.BotConfigId);
-
+                
             #endregion
 
             #region ClashOfClans
@@ -212,7 +216,7 @@ namespace NadekoBot.Services.Database
                 .HasMany(p => p.Songs)
                 .WithOne()
                 .OnDelete(Microsoft.EntityFrameworkCore.Metadata.DeleteBehavior.Cascade);
-
+                
 
             #endregion
         }

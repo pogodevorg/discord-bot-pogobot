@@ -5,7 +5,6 @@ namespace NadekoBot.Services
 {
     public class DbHandler
     {
-
         private static DbHandler _instance = null;
         public static DbHandler Instance = _instance ?? (_instance = new DbHandler());
         private readonly DbContextOptions options;
@@ -32,7 +31,6 @@ namespace NadekoBot.Services
 
             //}
         }
-
 
         public NadekoContext GetDbContext() =>
             new NadekoContext(options);

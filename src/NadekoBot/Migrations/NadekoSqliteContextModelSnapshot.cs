@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using NadekoBot.Services.Database;
+using NadekoBot.Services.Database.Models;
+using NadekoBot.Modules.Music.Classes;
 
 namespace NadekoBot.Migrations
 {
@@ -13,7 +15,7 @@ namespace NadekoBot.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
             modelBuilder
-                .HasAnnotation("ProductVersion", "1.0.0-rtm-21431");
+                .HasAnnotation("ProductVersion", "1.1.0-rtm-22752");
 
             modelBuilder.Entity("NadekoBot.Services.Database.Models.BlacklistItem", b =>
                 {
@@ -319,6 +321,8 @@ namespace NadekoBot.Migrations
                     b.Property<ulong>("AutoAssignRoleId");
 
                     b.Property<bool>("AutoDeleteByeMessages");
+
+                    b.Property<int>("AutoDeleteByeMessagesTimer");
 
                     b.Property<bool>("AutoDeleteGreetMessages");
 

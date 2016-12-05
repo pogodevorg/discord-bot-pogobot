@@ -8,7 +8,6 @@ using System.Text.RegularExpressions;
 using Google.Apis.Urlshortener.v1;
 using Google.Apis.Urlshortener.v1.Data;
 using NLog;
-using System.Collections;
 
 namespace NadekoBot.Services.Impl
 {
@@ -91,6 +90,10 @@ namespace NadekoBot.Services.Impl
         {
             if (string.IsNullOrWhiteSpace(url))
                 throw new ArgumentNullException(nameof(url));
+
+            if (string.IsNullOrWhiteSpace(NadekoBot.Credentials.GoogleApiKey))
+                return url;
+
             try
             {
                 var response = await sh.Url.Insert(new Url { LongUrl = url }).ExecuteAsync();
