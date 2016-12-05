@@ -68,10 +68,15 @@ namespace Discord.Rest
             var args = new ModifyMessageParams();
             func(args);
             var guildChannel = Channel as GuildChannel;
+            var apiArgs = new ModifyMessageParams
+            {
+                Content = args._content,
+                Embed = args._embed.IsSpecified ? args._embed.GetValueOrDefault() : Optional.Create<API.Embed>()
+            };
 
             Model model;
             if (guildChannel != null)
-                model = await Discord.ApiClient.ModifyMessageAsync(guildChannel.Guild.Id, Channel.Id, Id, args).ConfigureAwait(false);
+                model = await Discord.ApiClient.ModifyMessageAsync(guildChannel.Guild.Id, Channel.Id, Id, apiArgs).ConfigureAwait(false);
             else
                 model = await Discord.ApiClient.ModifyDMMessageAsync(Channel.Id, Id, args).ConfigureAwait(false);
                 

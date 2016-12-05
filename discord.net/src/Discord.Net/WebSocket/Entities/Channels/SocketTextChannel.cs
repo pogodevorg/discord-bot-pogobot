@@ -11,6 +11,7 @@ namespace Discord.WebSocket
     internal class SocketTextChannel : TextChannel, ISocketGuildChannel, ISocketMessageChannel
     {
         internal override bool IsAttached => true;
+        public ulong? LastMessageId { get; private set; }
 
         private readonly MessageManager _messages;
 
@@ -23,6 +24,7 @@ namespace Discord.WebSocket
         public SocketTextChannel(SocketGuild guild, Model model)
             : base(guild, model)
         {
+            LastMessageId = model.LastMessageId;
             if (Discord.MessageCacheSize > 0)
                 _messages = new MessageCache(Discord, this);
             else

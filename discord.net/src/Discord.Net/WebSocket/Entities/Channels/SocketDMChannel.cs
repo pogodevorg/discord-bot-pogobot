@@ -15,12 +15,14 @@ namespace Discord.WebSocket
 
         public new DiscordSocketClient Discord => base.Discord as DiscordSocketClient;
         public new SocketDMUser Recipient => base.Recipient as SocketDMUser;
+        public ulong? LastMessageId { get; private set; }
         public IReadOnlyCollection<ISocketUser> Users => ImmutableArray.Create<ISocketUser>(Discord.CurrentUser, Recipient);
         IReadOnlyCollection<ISocketUser> ISocketPrivateChannel.Recipients => ImmutableArray.Create(Recipient);
 
         public SocketDMChannel(DiscordSocketClient discord, SocketDMUser recipient, Model model)
             : base(discord, recipient, model)
         {
+            LastMessageId = model.LastMessageId;
             if (Discord.MessageCacheSize > 0)
                 _messages = new MessageCache(Discord, this);
             else

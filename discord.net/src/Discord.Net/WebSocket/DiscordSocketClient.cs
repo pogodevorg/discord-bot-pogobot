@@ -1355,26 +1355,48 @@ namespace Discord.WebSocket
                                             return;
                                         }
 
-                                        IPresence before;
+                                        IPresence beforePresence;
+                                        SocketGlobalUser beforeGlobal;
                                         var user = guild.GetUser(data.User.Id);
                                         if (user != null)
                                         {
-                                            before = user.Presence.Clone();
+                                            beforePresence = user.Presence.Clone();
+                                            beforeGlobal = user.User.Clone();
                                             user.Update(data, UpdateSource.WebSocket);
                                         }
                                         else
                                         {
-                                            before = new Presence(null, UserStatus.Offline);
+                                            beforePresence = new Presence(null, UserStatus.Offline);
                                             user = guild.AddOrUpdateUser(data, DataStore);
+                                            beforeGlobal = user.User.Clone();
                                         }
 
-                                        await _userPresenceUpdatedEvent.InvokeAsync(user, before, user).ConfigureAwait(false);
+                                        if (data.User.Username.IsSpecified || data.User.Avatar.IsSpecified)
+                                        {
+                                            await _userUpdatedEvent.InvokeAsync(beforeGlobal as IGuildUser, user).ConfigureAwait(false);
+                                            return;
+                                        }
+
+                                        await _userPresenceUpdatedEvent.InvokeAsync(user, beforePresence, user.Presence).ConfigureAwait(false);
                                     }
                                     else
                                     {
+                                        var guild = DataStore.GetGuild(data.GuildId.Value);
                                         var channel = DataStore.GetDMChannel(data.User.Id);
-                                        if (channel != null)
+                                        if (guild != null || channel != null)
+                                        {
+                                            var user = guild.GetUser(data.User.Id);
+                                            var beforePresence = user.Presence.Clone();
+                                            var before = user.User.Clone();
+
                                             channel.Recipient.Update(data, UpdateSource.WebSocket);
+
+                                            await _userPresenceUpdatedEvent.InvokeAsync(user, beforePresence, user.Presence).ConfigureAwait(false);
+                                            if (data.User.Username.IsSpecified || data.User.Avatar.IsSpecified)
+                                            {
+                                                await _userUpdatedEvent.InvokeAsync(before as IGuildUser, user).ConfigureAwait(false);
+                                            }
+                                        }
                                     }
                                 }
                                 break;

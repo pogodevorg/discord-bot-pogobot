@@ -17,5 +17,14 @@ namespace Discord.API.Rest
         [JsonProperty("tts")]
         internal Optional<bool> _tts { get; set; }
         public bool IsTTS { set { _tts = value; } }
+
+        [JsonProperty("embed")]
+        internal Optional<Embed> _embed { get; set; }
+        public Embed Embed { set { _embed = value; } }
+
+        public CreateMessageParams(string content)
+        {
+          Content = content;
+        }
     }
 }

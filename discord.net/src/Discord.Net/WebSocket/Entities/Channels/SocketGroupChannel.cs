@@ -17,6 +17,7 @@ namespace Discord.WebSocket
 
         private readonly MessageManager _messages;
         private ConcurrentDictionary<ulong, VoiceState> _voiceStates;
+        public ulong? LastMessageId { get; private set; }
 
         public new DiscordSocketClient Discord => base.Discord as DiscordSocketClient;
         public IReadOnlyCollection<ISocketUser> Users 
@@ -31,6 +32,7 @@ namespace Discord.WebSocket
             else
                 _messages = new MessageManager(Discord, this);
             _voiceStates = new ConcurrentDictionary<ulong, VoiceState>(1, 5);
+            LastMessageId = model.LastMessageId;
         }
         public override void Update(Model model, UpdateSource source)
         {

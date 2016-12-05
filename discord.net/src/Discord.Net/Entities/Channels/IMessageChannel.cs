@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Discord.API;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -10,11 +11,12 @@ namespace Discord
         IReadOnlyCollection<IMessage> CachedMessages { get; }
 
         /// <summary> Sends a message to this message channel. </summary>
-        Task<IUserMessage> SendMessageAsync(string text, bool isTTS = false);
+        Task<IUserMessage> SendMessageAsync(string text, bool isTTS = false, Embed embed = null);
         /// <summary> Sends a file to this text channel, with an optional caption. </summary>
         Task<IUserMessage> SendFileAsync(string filePath, string text = null, bool isTTS = false);
         /// <summary> Sends a file to this text channel, with an optional caption. </summary>
         Task<IUserMessage> SendFileAsync(Stream stream, string filename, string text = null, bool isTTS = false);
+        ulong? LastMessageId { get; }
         /// <summary> Gets a message from this message channel with the given id, or null if not found. </summary>
         Task<IMessage> GetMessageAsync(ulong id);
         /// <summary> Gets the message from this channel's cache with the given id, or null if not found. </summary>

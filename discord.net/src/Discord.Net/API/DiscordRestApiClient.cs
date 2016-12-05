@@ -41,7 +41,7 @@ namespace Discord.API
         public DiscordRestApiClient(RestClientProvider restClientProvider, JsonSerializer serializer = null, RequestQueue requestQueue = null)
         {
             _restClientProvider = restClientProvider;
-            _serializer = serializer ?? new JsonSerializer { ContractResolver = new DiscordContractResolver() };
+            _serializer = serializer ?? new JsonSerializer { DateFormatString = "yyyy-MM-ddTHH:mm:ssZ", ContractResolver = new DiscordContractResolver() };
             RequestQueue = requestQueue;
 
             _stateLock = new SemaphoreSlim(1, 1);
@@ -823,7 +823,6 @@ namespace Discord.API
         {
             Preconditions.NotEqual(channelId, 0, nameof(channelId));
             Preconditions.NotNull(args, nameof(args));
-            Preconditions.NotNullOrEmpty(args._content, nameof(args.Content));
             if (args._content.Length > DiscordConfig.MaxMessageSize)
                 throw new ArgumentException($"Message content is too long, length must be less or equal to {DiscordConfig.MaxMessageSize}.", nameof(args.Content));
 
@@ -910,13 +909,13 @@ namespace Discord.API
                     break;
                 default:
                     if (guildId != 0)
-                        await SendAsync("POST", $"channels/{channelId}/messages/bulk_delete", args, GuildBucket.DeleteMessages, guildId, options: options).ConfigureAwait(false);
+                        await SendAsync("POST", $"channels/{channelId}/messages/bulk-delete", args, GuildBucket.DeleteMessages, guildId, options: options).ConfigureAwait(false);
                     else
-                        await SendAsync("POST", $"channels/{channelId}/messages/bulk_delete", args, options: options).ConfigureAwait(false);
+                        await SendAsync("POST", $"channels/{channelId}/messages/bulk-delete", args, options: options).ConfigureAwait(false);
                     break;
             }
         }
-        public Task<Message> ModifyMessageAsync(ulong guildId, ulong channelId, ulong messageId, ModifyMessageParams args, RequestOptions options = null)
+        public Task<Message> ModifyMessageAsync(ulong guildId, ulong channelId, ulong messageId, Rest.ModifyMessageParams args, RequestOptions options = null)
         {
             Preconditions.NotEqual(guildId, 0, nameof(guildId));
 
@@ -933,7 +932,8 @@ namespace Discord.API
             Preconditions.NotNull(args, nameof(args));
             if (args._content.IsSpecified)
             {
-                Preconditions.NotNullOrEmpty(args._content, nameof(args.Content));
+                if (!args._embed.IsSpecified)
+                    Preconditions.NotNullOrEmpty(args._content, nameof(args.Content));
                 if (args._content.Value.Length > DiscordConfig.MaxMessageSize)
                     throw new ArgumentOutOfRangeException($"Message content is too long, length must be less or equal to {DiscordConfig.MaxMessageSize}.", nameof(args.Content));
             }

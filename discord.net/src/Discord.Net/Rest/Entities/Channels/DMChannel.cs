@@ -16,6 +16,7 @@ namespace Discord.Rest
     {
         public override DiscordRestClient Discord { get; }
         public IUser Recipient { get; private set; }
+        public ulong? LastMessageId { get; private set; }
 
         public virtual IReadOnlyCollection<IMessage> CachedMessages => ImmutableArray.Create<IMessage>();
         IReadOnlyCollection<IUser> IPrivateChannel.Recipients => ImmutableArray.Create(Recipient);
@@ -31,7 +32,9 @@ namespace Discord.Rest
         public void Update(Model model, UpdateSource source)
         {
             if (/*source == UpdateSource.Rest && */IsAttached) return;
-            
+
+            LastMessageId = model.LastMessageId;
+
             (Recipient as User).Update(model.Recipients.Value[0], source);
         }
 
@@ -63,9 +66,9 @@ namespace Discord.Rest
             return ImmutableArray.Create(currentUser, Recipient);
         }
 
-        public async Task<IUserMessage> SendMessageAsync(string text, bool isTTS)
+        public async Task<IUserMessage> SendMessageAsync(string text, bool isTTS, Discord.API.Embed embed = null)
         {
-            var args = new CreateMessageParams { Content = text, IsTTS = isTTS };
+            var args = new CreateMessageParams(text) { Content = text, IsTTS = isTTS, Embed = embed };
             var model = await Discord.ApiClient.CreateDMMessageAsync(Id, args).ConfigureAwait(false);
             return CreateOutgoingMessage(model);
         }

@@ -18,6 +18,7 @@ namespace Discord.Rest
     public class DiscordRestClient : IDiscordClient
     {
         private readonly object _eventLock = new object();
+        private Application _applicationInfo;
 
         public event Func<LogMessage, Task> Log { add { _logEvent.Add(value); } remove { _logEvent.Remove(value); } }
         private readonly AsyncEvent<Func<LogMessage, Task>> _logEvent = new AsyncEvent<Func<LogMessage, Task>>();
@@ -149,8 +150,11 @@ namespace Discord.Rest
 
             await _loggedOutEvent.InvokeAsync().ConfigureAwait(false);
         }
-        protected virtual Task OnLogoutAsync() => Task.CompletedTask;
-
+        protected virtual Task OnLogoutAsync()
+        {
+            _applicationInfo = null;
+            return Task.CompletedTask;
+        }
         /// <inheritdoc />
         public async Task<IApplication> GetApplicationInfoAsync()
         {

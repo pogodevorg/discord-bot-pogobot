@@ -72,7 +72,6 @@ namespace Discord.Rest
         public virtual void Update(PresenceModel model, UpdateSource source)
         {
             if (source == UpdateSource.Rest && IsAttached) return;
-            
             if (model.Roles.IsSpecified)
                 UpdateRoles(model.Roles.Value);
             if (model.Nick.IsSpecified)

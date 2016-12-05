@@ -8,6 +8,9 @@ namespace Discord.API.Rest
     {
         [JsonProperty("content")]
         internal Optional<string> _content { get; set; }
-        public string Content { set { _content = value; } }
+        public Optional<string> Content { set { _content = value.GetValueOrDefault(); } }
+        [JsonProperty("embed")]
+        internal Optional<Embed> _embed { get; set; }
+        public Optional<Embed> Embed { set { _embed = value.GetValueOrDefault(); } }
     }
 }

@@ -15,7 +15,8 @@ namespace Discord.Rest
     internal class TextChannel : GuildChannel, ITextChannel
     {
         public string Topic { get; private set; }
-        
+        public ulong? LastMessageId { get; private set; }
+
         public string Mention => MentionUtils.Mention(this);
         public virtual IReadOnlyCollection<IMessage> CachedMessages => ImmutableArray.Create<IMessage>();
 
@@ -28,6 +29,7 @@ namespace Discord.Rest
             if (source == UpdateSource.Rest && IsAttached) return;
 
             Topic = model.Topic.Value;
+            LastMessageId = model.LastMessageId;
             base.Update(model, source);
         }
 
@@ -58,12 +60,16 @@ namespace Discord.Rest
             return users.Where(x => Permissions.GetValue(Permissions.ResolveChannel(x, this, x.GuildPermissions.RawValue), ChannelPermission.ReadMessages)).ToImmutableArray();
         }
 
-        public async Task<IUserMessage> SendMessageAsync(string text, bool isTTS)
+        public async Task<IUserMessage> SendMessageAsync(string text, bool isTTS, Discord.API.Embed embed = null)
         {
-            var args = new CreateMessageParams { Content = text, IsTTS = isTTS };
-            var model = await Discord.ApiClient.CreateMessageAsync(Guild.Id, Id, args).ConfigureAwait(false);
-            return CreateOutgoingMessage(model);
+            try
+            {
+                var args = new CreateMessageParams(text) { Content = text, IsTTS = isTTS, Embed = embed };
+                var model = await Discord.ApiClient.CreateMessageAsync(Guild.Id, Id, args).ConfigureAwait(false);
+                return CreateOutgoingMessage(model);
+            } catch { return null; }
         }
+
         public async Task<IUserMessage> SendFileAsync(string filePath, string text, bool isTTS)
         {
             string filename = Path.GetFileName(filePath);
