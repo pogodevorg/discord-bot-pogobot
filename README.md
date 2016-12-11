@@ -18,13 +18,7 @@
 
 ## Installation
 ### Linux
-1. `git clone https://github.com/pogodevorg/discord-bot-pogobot.git`
-2. `git submodule update --init --recursive`
-3. `Install` [.NET Core](https://www.microsoft.com/net/core#linuxubuntu)
-4. `dotnet restore`
-5. `Configure credentials.json`
-6. `dotnet build -c Release`
-7. `dotnet run -c Release`
+Cleaning up, will reupload a different repository.
 
 ## Documentation
 1. [Commands List](http://nadekobot.readthedocs.io/en/1.0/Commands%20List/)
